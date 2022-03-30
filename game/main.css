@@ -1,0 +1,43 @@
+body{
+    background-color: aliceblue;    
+}
+
+
+
+#board{
+    position: relative;
+    margin: auto;
+    
+}
+
+#board .tile{
+    width: 50px;
+    height: 50px;
+    border: 2px solid black;
+    padding: 10px;
+    text-align: center;
+    background-color: rgb(230, 213, 193);
+    
+}
+
+.displaying{
+    display: block;
+}
+
+.airPlaneDiv{
+    position: fixed;
+    width: 110px;
+    height: 110px;
+    top: 225px;
+    left: 425px;
+    
+}
+
+.airPlaneDiv .plane{
+    width: 100%;
+    height: 100%;
+    background-image: url('../art/Plane1.svg');
+   
+}
+
+/*Plane colors*/
