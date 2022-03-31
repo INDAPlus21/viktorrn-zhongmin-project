@@ -1,7 +1,20 @@
 body{
-    background-color: aliceblue;    
+    background-color: rgb(129, 138, 144);  
+    padding: 0;
+    margin: 0;  
 }
 
+section{
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+#preGameScreen{
+    background-color: white;
+}
 
 
 #board{
@@ -10,13 +23,19 @@ body{
     
 }
 
+#boardScreen{
+    position: absolute;
+    width:100%;
+    height: 100%;
+}
+
 #board .tile{
     width: 50px;
     height: 50px;
     border: 2px solid black;
     padding: 10px;
     text-align: center;
-    background-color: rgb(230, 213, 193);
+    background-color: rgb(189, 166, 140);
     
 }
 
@@ -26,18 +45,30 @@ body{
 
 .airPlaneDiv{
     position: fixed;
-    width: 110px;
-    height: 110px;
     top: 225px;
     left: 425px;
-    
+    transform-origin: center;
 }
 
 .airPlaneDiv .plane{
-    width: 100%;
-    height: 100%;
-    background-image: url('../art/Plane1.svg');
-   
+    position: absolute;
+    width: 110px;
+    height: 110px;
+    -webkit-mask-image: url('../art/Plane1.svg');
+    webkit-image: url('../art/Plane1.svg');
+}
+
+.shadow{
+    position: absolute;
+    width: 110px;
+    height: 110px;
+    background-color: rgba(0, 0, 0, 0.4);
+    -webkit-mask-image: url('../art/Plane1.svg');
+    webkit-image: url('../art/Plane1.svg'); 
 }
 
 /*Plane colors*/
+
+.airPlaneDiv .red{
+    background-color: rgb(226, 49, 49);
+}
