@@ -11,9 +11,7 @@ shadowDistanceScaler = 30;
 lightPos = {x:600,y:600}
 
 function curve(startX,startY,endX,endY,bezX,bezY){
-    while($('line')){
-        document.body.removeChild($('line'));
-    }
+    
         
     var bezierX = startX +bezX
     var bezierY = startY +bezY
@@ -24,7 +22,6 @@ function curve(startX,startY,endX,endY,bezX,bezY){
 
     for(var t=0.0;t<=1;t+=0.01)
     {
-        console.log("h")
         prevX = x;
         prevY = y;
         x = (  (1-t)*(1-t)*startX + 2*(1-t)*t*bezierX+t*t*endX);
@@ -67,7 +64,11 @@ document.onpointerdown = (e)=>{
     plane.style.transition = "top "+ dist/velocity +"s linear, left "+ dist/velocity +"s linear"
     plane.style.top = e.clientY + -55 +'px';
     plane.style.left = e.clientX + -55 + 'px';
-    curve( 280,280, 380,180 ,0,-100);  
+    while($('line')){
+        document.body.removeChild($('line'));
+    }
+    curve( 280,280, 380,180 ,0,-50);
+    curve( 480,80, 380,180 ,0,50);  
 }
 
 function drawShadow(plane){
@@ -75,8 +76,11 @@ function drawShadow(plane){
     /*while($('line')){
         document.body.removeChild($('line'));
     }*/
-        
     let planePos = plane.getBoundingClientRect();
+    if(plane.getAttribute('prevX') == planePos.x &&  plane.getAttribute('prevY') == planePos.y) return;
+    plane.setAttribute('prevX',planePos.x);
+    plane.setAttribute('prevY',planePos.y);
+    console.log("new")
     let lx = lightPos.x;
     let ly = lightPos.y;
     let shadowDiv = plane.childNodes[1];
