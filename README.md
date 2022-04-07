@@ -34,3 +34,37 @@ Begin by downloading the entire repository. Make sure [Node.js](https://nodejs.o
 ```npm i express socket.io```
 Run the game with:
 ```node index.js```
+
+# Documentation lingo
+
+## Issues
+
+Issues are written in present continuous tense (example "I am working"), *issues* are to be labled, and assigned a *milestone* and a *project*.
+
+## Lables
+
+* documentation
+* duplicate
+* enhancment
+* good first issue
+* help wanted
+* invalid
+* qeusation
+* wontfix
+
+## Milestones
+
+Milestone titles are written in present continuous tense (example "I am working") and outline larger sets on issues, each milestone when completed should contribute something significant to the project as a whole, such as aking the basic gameloop or adding online play. 
+
+## Project
+
+All the issues and milestones are assigned the *Into the Storm* Project.
+
+## Commits
+
+Commits are to be short and concice written in Past simple tense (example "I work"), overviewing additions or scrapped things.
+
+# Authors and developers githandles
+
+viktorrn & Zhongmin
+
