@@ -1,0 +1,23 @@
+{
+  "name": "viktorrn-zhongmin-project",
+  "version": "1.0.0",
+  "description": "A board game with planes",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/INDAPlus21/viktorrn-zhongmin-project.git"
+  },
+  "author": "Viktorrn & Zhongmin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/INDAPlus21/viktorrn-zhongmin-project/issues"
+  },
+  "homepage": "https://github.com/INDAPlus21/viktorrn-zhongmin-project#readme",
+  "dependencies": {
+    "express": "^4.17.3",
+    "socket.io": "^4.4.1"
+  }
+}
