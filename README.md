@@ -62,7 +62,7 @@ All the issues and milestones are assigned the *Into the Storm* Project.
 
 ## Commits
 
-Commits are to be short and concice written in Past simple tense (example "I work"), overviewing additions or scrapped things.
+Commits are to be short and concice written in Past simple tense (example "I worked"), overviewing additions or scrapped things.
 
 # Authors and developers githandles
 
