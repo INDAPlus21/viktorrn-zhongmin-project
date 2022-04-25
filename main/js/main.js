@@ -2,10 +2,23 @@ import * as Util from './utility.js';
 const canvas = Util.$('boardScreen');
 const ctx = canvas.getContext('2d');
 
+let tileDimensions = {
+    radius:9,
+    lineWidth: 3,
+    regularColor: "grey",
+    highlightColor: "white"
+}
+
 let BoardData = {
     innerTiles : [],
     middleTiles: [],
     outerTiles: []
+}
+
+let plane = {
+    x:0,
+    y:0,
+    tilesPerCycle:0
 }
 
 function updateScreenDimensions(width,height){
@@ -15,44 +28,32 @@ function updateScreenDimensions(width,height){
 
 window.onload = () =>{
     updateScreenDimensions(1200,1200)
-    BoardData = createBoard(  [{radius: 500, tiles:21, tileHeight: 90, circleLayer:'outer'},
-                               {radius: 300, tiles:11, tileHeight: 70, circleLayer:'middle'},
-                               {radius: 150, tiles:6, tileHeight: 50, circleLayer:'inner'  }   ]  ,BoardData);    
+    BoardData = createBoard(  [{radius: 500, tiles:36, circleLayer:'outer'},
+                               {radius: 330, tiles:18, circleLayer:'middle'},
+                               {radius: 150, tiles:9, circleLayer:'inner'  }   ]  ,BoardData);    
     drawBoard(BoardData)
     console.log(BoardData)
+    setInterval(update(),1000/60)
 }
 
 function createBoard(layers,BoardData){ 
     for(let layer of layers){
-        let tileAmount = 2*layer.tiles;
+        let tileAmount = layer.tiles;
         let radius = layer.radius;
-        let tileHeight = layer.tileHeight;
-        for(let step = 0; step < tileAmount; step+=2){
+        let ring = new Path2D();
+        ring.arc(canvas.width/2 ,canvas.height/2 ,radius,0,2*Math.PI)
+        BoardData[layer.circleLayer+'Tiles'].push(ring);
+        for(let step = 0; step < tileAmount; step++){
     
             let ang1 = 2*Math.PI * step/tileAmount;
-            let ang2 = 2*Math.PI * (step+1)/tileAmount;
-    
             let ix1 = canvas.width/2 + radius*Math.cos(ang1);
             let iy1 = canvas.height/2 + radius*Math.sin(ang1);
             
-            let ix2 = canvas.width/2 + radius*Math.cos(ang2);
-            let iy2 = canvas.height/2 + radius*Math.sin(ang2);
     
-            let ox1 = canvas.width/2 + (radius+tileHeight)*Math.cos(ang1);
-            let oy1 = canvas.height/2 + (radius+tileHeight)*Math.sin(ang1);
+            let tile = new Path2D();
+            tile.arc(ix1,iy1,tileDimensions.radius,0,2*Math.PI);
     
-            let ox2 = canvas.width/2 + (radius+tileHeight)*Math.cos(ang2);
-            let oy2 = canvas.height/2 + (radius+tileHeight)*Math.sin(ang2);
-    
-            let tileRegion = new Path2D();
-            tileRegion.moveTo(ix1, iy1);
-            tileRegion.lineTo(ix2, iy2);
-            tileRegion.lineTo(ox2, oy2);
-            tileRegion.lineTo(ox1, oy1);
-            tileRegion.lineTo(ix1, iy1);
-            tileRegion.closePath();
-    
-            BoardData[layer.circleLayer+'Tiles'].push(tileRegion);
+            BoardData[layer.circleLayer+'Tiles'].push(tile);
     
         }
     }
@@ -60,18 +61,33 @@ function createBoard(layers,BoardData){
     return BoardData;
 }
 
-function drawBoard(BoardData){
-    for(let tile of BoardData['innerTiles']){
-        ctx.fillStyle = 'white';
-        ctx.fill(tile);
-    }
-    for(let tile of BoardData['middleTiles']){
-        ctx.fillStyle = 'white';
-        ctx.fill(tile);
-    }
-    for(let tile of BoardData['outerTiles']){
-        ctx.fillStyle = 'white';
-        ctx.fill(tile);
-    }
-    
+function drawBoard(){
+    for(let key of Object.keys(BoardData) ){
+        console.log(key)
+        for(let tile in BoardData[key]){
+            if(tile == 0){
+                ctx.strokeStyle = '#aaa';
+                ctx.lineWidth = 5;
+                ctx.stroke(BoardData[key][tile]);
+                continue;
+            }
+            ctx.strokeStyle = '#ddd';
+            ctx.fillStyle = '#555'
+            ctx.lineWidth = tileDimensions.lineWidth;
+            ctx.fill(BoardData[key][tile]);
+            ctx.stroke(BoardData[key][tile])
+        }
+    }    
 }    
+
+function drawPlane(plane){
+
+}
+
+function calcPlanePosition(plane){
+
+}
+
+function update(){
+
+}
