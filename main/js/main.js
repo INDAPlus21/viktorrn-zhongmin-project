@@ -1,15 +1,23 @@
 import * as Util from './utility.js';
 const canvas = Util.$('boardScreen');
-const ctx = canvas.getContext('2d');
+const progressbar = Util.$('progressBar');
+//const ctx = canvas.getContext('2d');
+
+// gamedata that will end up in json
 
 let tileDimensions = {
-    radius:9,
+    radius:12,
     lineWidth: 3,
-    regularColor: "grey",
+    regularColor: "#ccc",
     highlightColor: "white"
 }
 
-let BoardData = {
+let planeDimensions = {
+    width:100,
+    height:100,
+}
+
+let BoardDrawingData = {
     innerTiles : [],
     middleTiles: [],
     outerTiles: []
@@ -18,76 +26,93 @@ let BoardData = {
 let plane = {
     x:0,
     y:0,
-    tilesPerCycle:0
+    tilesPerCycle:1
 }
+
+let camera = {
+    
+}
+
+// preload stuff
 
 function updateScreenDimensions(width,height){
     canvas.width = width;
     canvas.height = height;
 }
 
-window.onload = () =>{
-    updateScreenDimensions(1200,1200)
-    BoardData = createBoard(  [{radius: 500, tiles:36, circleLayer:'outer'},
-                               {radius: 330, tiles:18, circleLayer:'middle'},
-                               {radius: 150, tiles:9, circleLayer:'inner'  }   ]  ,BoardData);    
-    drawBoard(BoardData)
-    console.log(BoardData)
-    setInterval(update(),1000/60)
-}
-
-function createBoard(layers,BoardData){ 
+function createBoard(layers,BoardDrawingData){ 
     for(let layer of layers){
         let tileAmount = layer.tiles;
         let radius = layer.radius;
-        let ring = new Path2D();
-        ring.arc(canvas.width/2 ,canvas.height/2 ,radius,0,2*Math.PI)
-        BoardData[layer.circleLayer+'Tiles'].push(ring);
-        for(let step = 0; step < tileAmount; step++){
-    
+        let ring = {
+            type:'ringOutline',
+            x: canvas.width/2,
+            y: canvas.height/2,
+            radius: radius,
+        }
+        BoardDrawingData[layer.circleLayer+'Tiles'].push(ring);
+        for(let step = 0; step < tileAmount; step++){  
             let ang1 = 2*Math.PI * step/tileAmount;
-            let ix1 = canvas.width/2 + radius*Math.cos(ang1);
-            let iy1 = canvas.height/2 + radius*Math.sin(ang1);
-            
-    
-            let tile = new Path2D();
-            tile.arc(ix1,iy1,tileDimensions.radius,0,2*Math.PI);
-    
-            BoardData[layer.circleLayer+'Tiles'].push(tile);
+            let x = canvas.width/2 + radius*Math.cos(ang1);
+            let y = canvas.height/2 + radius*Math.sin(ang1); 
+            let tile = {
+                type:'tile',
+                x:x,
+                y:y,
+                angle:ang1,
+            }
+            BoardDrawingData[layer.circleLayer+'Tiles'].push(tile);
     
         }
     }
    
-    return BoardData;
+    return BoardDrawingData;
 }
 
-function drawBoard(){
-    for(let key of Object.keys(BoardData) ){
-        console.log(key)
-        for(let tile in BoardData[key]){
-            if(tile == 0){
-                ctx.strokeStyle = '#aaa';
-                ctx.lineWidth = 5;
-                ctx.stroke(BoardData[key][tile]);
-                continue;
-            }
-            ctx.strokeStyle = '#ddd';
-            ctx.fillStyle = '#555'
-            ctx.lineWidth = tileDimensions.lineWidth;
-            ctx.fill(BoardData[key][tile]);
-            ctx.stroke(BoardData[key][tile])
-        }
-    }    
-}    
+// update stuff
 
-function drawPlane(plane){
-
-}
-
-function calcPlanePosition(plane){
-
-}
 
 function update(){
 
+}
+
+window.onload = () =>{
+    //set up
+    updateScreenDimensions(1200,1200)
+    BoardDrawingData = createBoard(  [{radius: 500, tiles:36, circleLayer:'outer' },
+                                      {radius: 330, tiles:18, circleLayer:'middle'},
+                                      {radius: 150, tiles:9, circleLayer:'inner'  }   ]  
+                                      ,BoardDrawingData
+                                  );    
+    
+    //console.log(BoardDrawingData['outerTiles'][1].x );
+    plane.x = BoardDrawingData['outerTiles'][1].x;  
+    plane.y = BoardDrawingData['outerTiles'][1].y; 
+
+
+
+    var offscreen = canvas.transferControlToOffscreen();
+    let renderWorker = new Worker('js/renderer.js'); 
+    renderWorker.postMessage( 
+        {canvas: offscreen,
+            data:[
+                ['setUp'],
+            ]
+        },
+        [offscreen]
+    )
+    
+    setInterval( ()=>{update()},1000/60)
+    setInterval( ()=>{draw(renderWorker)},1000/60)
+}
+
+function draw(renderWorker){
+    renderWorker.postMessage( 
+        {
+            data:[
+                ['drawBoard',BoardDrawingData,tileDimensions],
+                ['drawPlane',plane,planeDimensions],
+            ]
+        }
+    )
 }
