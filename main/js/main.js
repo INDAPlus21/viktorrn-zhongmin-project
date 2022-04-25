@@ -46,15 +46,15 @@ function createBoard(layers,BoardDrawingData){
         let radius = layer.radius;
         let ring = {
             type:'ringOutline',
-            x: canvas.width/2,
-            y: canvas.height/2,
+            x: 0,//canvas.width/2,
+            y: 0,//canvas.height/2,
             radius: radius,
         }
         BoardDrawingData[layer.circleLayer+'Tiles'].push(ring);
         for(let step = 0; step < tileAmount; step++){  
             let ang1 = 2*Math.PI * step/tileAmount;
-            let x = canvas.width/2 + radius*Math.cos(ang1);
-            let y = canvas.height/2 + radius*Math.sin(ang1); 
+            let x =  radius*Math.cos(ang1); // canvas.width/2
+            let y =  radius*Math.sin(ang1); ///canvas.height/2 +
             let tile = {
                 type:'tile',
                 x:x,
