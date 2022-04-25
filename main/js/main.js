@@ -23,11 +23,34 @@ let BoardDrawingData = {
     outerTiles: []
 }
 
-let plane = {
-    x:0,
-    y:0,
-    tilesPerCycle:1
-}
+let plane = [
+    {
+        x:0,
+        y:0,
+        radius:500,
+        tilesPerCycle:1,
+        angOffset:0,
+        color: "rgba(0, 0, 180"
+    },
+    {
+        x:0,
+        y:0,
+        radius:150,
+        tilesPerCycle:1,
+        angOffset:2,
+        color: "rgba(180, 0, 0"
+    },
+    {
+        x:0,
+        y:0,
+        radius:500,
+        tilesPerCycle:1,
+        angOffset:3.7,
+        color: "rgba(0, 100, 0"
+    },
+]
+    
+
 
 let camera = {
     
