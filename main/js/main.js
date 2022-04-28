@@ -1,9 +1,45 @@
 import * as Util from './utility.js';
 const canvas = Util.$('boardScreen');
-const progressbar = Util.$('progressBar');
+const progressbarDOM = Util.$('progressBar');
+const updateRateDOM = Util.$('updatesPerSecond');
 //const ctx = canvas.getContext('2d');
 
+
+
+/*     
+                                                <O======O
+                                                //    //
+                                               //    //
+                                              //    //
+                                          o==//    //.
+                                         <| //    //<|   
+                                          o//    //=-¨
+                                          //     \\
+                                         //       \\
+         I        // //O==---====ooooOOOO[o][o][o][o]OOOOOOoooo>>>>--....              // // 
+        //      //    //    \ - /     O     [o]   [o]                [][][]OOoo.......// //--.. 
+      {<O>}====||==||[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]}--o
+        \\      \\    \\    / - \     O     [o]   [o]                [][][]OOoo¨¨¨¨¨¨¨\\ \\--¨¨  
+         I        \\ \\O==---====ooooOOOO[o][o][o][o]OOOOOOoooo>>>>--¨¨¨¨              \\ \\ 
+                                        \\       //
+                                         \\     //
+                                         o\\    \\=-.
+                                        <| \\    \\<| 
+                                         o==\\    \\¨
+                                             \\    \\
+                                              \\    \\
+                                               \\    \\
+                                               <O======O
+*/ 
+
+
 // gamedata that will end up in json
+let debugHandler = {
+    currentDateTime: new Date(),
+    timeSinceLastUpdate: 0,
+    frameBuffer: [],
+    delta:1,
+}
 
 let tileDimensions = {
     radius:12,
@@ -23,28 +59,28 @@ let BoardDrawingData = {
     outerTiles: []
 }
 
-let plane = [
+let planes = [
     {
         x:0,
         y:0,
-        radius:500,
-        tilesPerCycle:1,
+        radius:510,
+        tilesInCycle:36,
         angOffset:0,
         color: "rgba(0, 0, 180"
     },
     {
         x:0,
         y:0,
-        radius:150,
-        tilesPerCycle:1,
+        radius:170,
+        tilesInCycle:1,
         angOffset:2,
         color: "rgba(180, 0, 0"
     },
     {
         x:0,
         y:0,
-        radius:500,
-        tilesPerCycle:1,
+        radius:510,
+        tilesInCycle:36,
         angOffset:3.7,
         color: "rgba(0, 100, 0"
     },
@@ -92,27 +128,65 @@ function createBoard(layers,BoardDrawingData){
     return BoardDrawingData;
 }
 
+
+
 // update stuff
+function draw(renderWorker){
+   
+    renderWorker.postMessage( 
+        {
+            data:[
+                ['drawBoard',BoardDrawingData,tileDimensions],
+                ['drawPlane',planes,planeDimensions],
+            ]
+        }
+    )
+}
 
+function updatePlane(planes){
+    for(let p in planes){
+        
+    }
+    return planes;
+}
 
-function update(){
+function update(renderWorker){
+    var currentTime = new Date();
+    currentTime = currentTime.getTime();
+    debugHandler.delta = (currentTime - debugHandler.timeSinceLastUpdate)/1000;
+    
+    const now = performance.now();
+    while (debugHandler.frameBuffer.length > 0 && debugHandler.frameBuffer[0] <= now - 1000) 
+    {
+        debugHandler.frameBuffer.shift();  
+    }
+    debugHandler.frameBuffer.push(now);
+    updateRateDOM.innerHTML = "Update time: " + debugHandler.frameBuffer.length  ;
 
+    debugHandler.timeSinceLastUpdate = currentTime;
+    planes = updatePlane(planes)
+    draw(renderWorker)
+    
+      
+     
+  
 }
 
 window.onload = () =>{
+    
+    
     //set up
     updateScreenDimensions(1200,1200)
-    BoardDrawingData = createBoard(  [{radius: 500, tiles:36, circleLayer:'outer' },
-                                      {radius: 330, tiles:18, circleLayer:'middle'},
-                                      {radius: 150, tiles:9, circleLayer:'inner'  }   ]  
-                                      ,BoardDrawingData
-                                  );    
+    BoardDrawingData = createBoard(  [
+        {radius: 510, tiles:36, circleLayer:'outer' },
+         {radius: 340, tiles:18, circleLayer:'middle'},
+         {radius: 170, tiles:9, circleLayer:'inner'  }],
+          BoardDrawingData
+        );    
     
     //console.log(BoardDrawingData['outerTiles'][1].x );
-    plane.x = BoardDrawingData['outerTiles'][1].x;  
-    plane.y = BoardDrawingData['outerTiles'][1].y; 
-
-
+    planes.x = BoardDrawingData['outerTiles'][1].x;  
+    planes.y = BoardDrawingData['outerTiles'][1].y; 
 
     var offscreen = canvas.transferControlToOffscreen();
     let renderWorker = new Worker('js/renderer.js'); 
@@ -124,18 +198,13 @@ window.onload = () =>{
         },
         [offscreen]
     )
-    
-    setInterval( ()=>{update()},1000/60)
-    setInterval( ()=>{draw(renderWorker)},1000/60)
+    renderWorker.onmessage = (e) =>{
+        update(renderWorker);
+    }
+   
+
+    //setInterval( ()=>{update(renderWorker)},2)
+    //setInterval( ()=>{draw(renderWorker)},1000/60)
 }
 
-function draw(renderWorker){
-    renderWorker.postMessage( 
-        {
-            data:[
-                ['drawBoard',BoardDrawingData,tileDimensions],
-                ['drawPlane',plane,planeDimensions],
-            ]
-        }
-    )
-}
+
