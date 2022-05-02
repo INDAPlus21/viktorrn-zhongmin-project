@@ -1,5 +1,5 @@
 body{
-    background-color: rgb(129, 138, 144);  
+    background-color: rgb(85, 72, 72);  
     padding: 0;
     margin: 0;  
 }
@@ -9,7 +9,22 @@ section{
     margin: 0;
     width: 100%;
     height: 100%;
+    position: absolute;
+    background-repeat: no-repeat;
+    background-size:2000px;
     display: none;
+    overflow: hidden;
+}
+
+.opacityDiv{
+    position: fixed;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.25;
+    background-color: black;
+    
 }
 
 #preGameScreen{

@@ -46,8 +46,8 @@ function drawBoard(BoardDrawingData,tileDimensions){
             if(i == 0){
                 
                 ctx.arc(0 ,0 ,tile.radius,0,2*Math.PI)
-                ctx.strokeStyle = '#aaa';
-                ctx.lineWidth = 5;
+                ctx.strokeStyle = '#fff8';
+                ctx.lineWidth = 3;
                 ctx.stroke();
                 continue;
             }
@@ -66,7 +66,7 @@ function drawBoard(BoardDrawingData,tileDimensions){
                 break;
                     
                 default:
-                    ctx.fillStyle = '#555'
+                    ctx.fillStyle = tileDimensions.dotColor;
                     break;
             }
             
@@ -111,7 +111,7 @@ function drawPlane(planeDataList,planeDimensions){
         ctx.rotate(planeData.angle + Math.PI);
         ctx.translate(-svgSize/2,-svgSize/2)
         
-        ctx.fillStyle = planeData.color+",0.2)"
+        ctx.fillStyle = planeData.color+"55"
         ctx.fill(plane);
 
         ctx.setTransform(scaleX*universalScale,0,0,scaleY*universalScale,canvas.width/2+planeData.x,canvas.height/2+planeData.y)
