@@ -16,7 +16,7 @@ export class PlayerController{
         this.radiusValues = rads;
         this.tileAmounts = tiles;
 
-        this.startAng = startPos.angle;
+        this.startAngle = startPos.angle;
         this.planesCreated = 0;
 
         this.needsToBeReDrawn = false;
@@ -46,7 +46,7 @@ export class PlayerController{
         }
 
         if(this.spentDie != null){
-            if(this.dice[this.spentDie.index] == 6){
+            if(this.dice[this.spentDie.index] == 6 || this.dice[this.spentDie.index] == 1){
                 this.planesTakingOff.push(this.createPlane(this.id))
             }
             this.dice.splice(this.spentDie.index,1)
@@ -56,8 +56,10 @@ export class PlayerController{
 
         for(let p of this.planes){
             
-            p.angle += (Math.PI*2)/gameHandler.seccondsPerCycle*gameHandler.delta*(gameHandler.tileAmounts[0]/p.tilesInCycle)
+            p.angle += (Math.PI*2)/(2*gameHandler.seccondsPerCycle)*gameHandler.delta*(gameHandler.tileAmounts[0]/p.tilesInCycle)
             p.angle = p.angle%(Math.PI*2)
+            p.tileIndex = 1+Math.ceil((p.angle/(Math.PI*2))*p.tilesInCycle) 
+            gameHandler.tilesOccupied[ Object.keys(gameHandler.tilesOccupied)[p.layer] ][p.tileIndex] = ({playerId: this.id});
             
             gameHandler.planes.push(p);
         }
@@ -69,10 +71,10 @@ export class PlayerController{
         console.log(id)
         let plane = new Plane(this.planesCreated,this.id); 
         this.planesCreated++;
-        plane.layer = 1;
+        plane.layer = 2;
         plane.tilesInCycle = this.tileAmounts[2];
         plane.radius = this.radiusValues[2];
-        plane.angle = 0;
+        plane.angle = this.startAngle;
         console.log("created plane",plane);
         return plane;
     }
@@ -88,11 +90,11 @@ class Plane{
     constructor(id,ownerId){
         this.ownerId = ownerId;
         this.id = id; 
-        console.log(ownerId)
         this.color = Util.playerColors(ownerId);
         this.x = 0;
         this.y = 0;
         this.radius;
+        this.angle;
         this.tilesInCycle;
         this.layer;
         this.tileIndex;

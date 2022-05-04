@@ -49,6 +49,7 @@ let gameHandler = {
 
     radiuses:[90,240,400],
     tileAmounts:[9,18,36],
+    playerAmount:4,
 
     pause:false,
     dispFPS:true,
@@ -63,10 +64,16 @@ let gameHandler = {
 
     clientPlayer:0,
     players:[],
+    playerStartAngles:[],
     planes: [],
+    tilesOccupied:{
+        'innerTiles': [],
+        'middleTiles':[],
+        'outerTiles': [],
+    },
     boardData:{
-        innerTiles : [],
-        middleTiles: [],
+        innerTiles: [],
+        middleTiles:[],
         outerTiles: []
     }
 }
@@ -129,28 +136,34 @@ function createBoard(layers,boardData){
                 y:y,
                 angle:ang1,
                 tileType:'tile',
+                plane:null,
             }
             boardData[layer.circleLayer+'Tiles'].push(tile);
-    
         }
     }
+
+
+
+    //start positions
+
     let j = 0;
     for(let i in boardData['outerTiles']){
         if(i == 0) continue; 
         let tile = boardData['outerTiles'][i];
-        if( (i - 1 + 4 )%(9) == 0 ){
+        if( (i - 1 + 4 )%(gameHandler.tileAmounts[2]/gameHandler.playerAmount) == 0 ){
             tile.tileType = j+'Start';
+            gameHandler.playerStartAngles[j] = tile.angle;
             j+=1;
         }
     }
+
+
    
     return boardData;
 }
 
-function createPlayer(playerData,gameHandler){
-    let player = new PlayerController(0,{angle:0},gameHandler.radiuses,gameHandler.tileAmounts);
-    console.log(player)
-    return player;
+function createPlayer(playerIndex,gameHandler){
+    return new PlayerController(playerIndex,{angle:gameHandler.playerStartAngles[playerIndex]},gameHandler.radiuses,gameHandler.tileAmounts);
 }
 
 
@@ -160,7 +173,7 @@ function draw(renderWorker){
     renderWorker.postMessage( 
         {
             data:[
-                ['drawBoard',gameHandler.boardData,tileDimensions],
+                ['drawBoard',gameHandler.boardData,tileDimensions,gameHandler.tilesOccupied],
                 ['drawPlane',gameHandler.planes,planeDimensions],
             ]
         }
@@ -181,6 +194,13 @@ function update(renderWorker){
     gameHandler.frameBuffer.push(now);
     updateRateDOM.innerHTML = "FPS: " + gameHandler.frameBuffer.length  ;
     gameHandler.planes = [];
+    gameHandler.tilesOccupied = {
+        'innerTiles':[],
+        'middleTiles':[],
+        'outerTiles':[],
+        
+        
+    };
 
     gameHandler.timerReset = false;
 
@@ -196,6 +216,7 @@ function update(renderWorker){
             if(player == undefined || player == null) continue
             gameHandler = player.update(gameHandler);
         }
+        
         
     }
     
@@ -219,9 +240,9 @@ window.onload = () =>{
     //set up
     updateScreenDimensions(1000,1000)
     gameHandler.boardData = createBoard(  [
-        {radius: gameHandler.radiuses[2], tiles:gameHandler.tileAmounts[2], circleLayer:'outer' },
+        {radius: gameHandler.radiuses[0], tiles:gameHandler.tileAmounts[0], circleLayer:'inner' },
         {radius: gameHandler.radiuses[1], tiles:gameHandler.tileAmounts[1], circleLayer:'middle'},
-        {radius: gameHandler.radiuses[0], tiles:gameHandler.tileAmounts[0], circleLayer:'inner' }],
+        {radius: gameHandler.radiuses[2], tiles:gameHandler.tileAmounts[2], circleLayer:'outer' }, ],
         gameHandler.boardData
         );    
     
@@ -275,5 +296,3 @@ window.onload = () =>{
         gameHandler.keyStates[e.key] = 0;
     }
 }
-
-

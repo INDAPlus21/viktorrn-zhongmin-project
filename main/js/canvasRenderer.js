@@ -26,7 +26,7 @@ function draw(drawData){
     for(let data of drawData ){
         switch(data[0]){
             case'drawBoard':
-                drawBoard(data[1],data[2])
+                drawBoard(data[1],data[2],data[3])
                 drawLines(data[1]);
                 break;
             case 'drawPlane':
@@ -36,7 +36,7 @@ function draw(drawData){
     }
 }
 
-function drawBoard(BoardDrawingData,tileDimensions){
+function drawBoard(BoardDrawingData,tileDimensions,tilesOccupied){
     resetTransform();
     for(let key of Object.keys(BoardDrawingData) ){
         for(let i in BoardDrawingData[key]){
@@ -62,10 +62,16 @@ function drawBoard(BoardDrawingData,tileDimensions){
                 case '2Start':
                 case '3Start':
                     ctx.fillStyle = playerColors(tile.tileType[0])
+                    ctx.strokeStyle = '#222'
                 break;
                     
                 default:
                     ctx.fillStyle = tileDimensions.dotColor;
+                    if(tilesOccupied[key][i] != undefined){
+                        ctx.fillStyle = playerColors(tilesOccupied[key][i].playerId)+"bb";
+                        ctx.strokeStyle = '#222'
+                    }
+                    
                     break;
             }
             
@@ -73,6 +79,7 @@ function drawBoard(BoardDrawingData,tileDimensions){
             ctx.lineWidth = tileDimensions.lineWidth;
             ctx.fill(tilePath);
 
+           
             ctx.stroke(tilePath)
             ctx.closePath();
 
@@ -110,7 +117,7 @@ function drawPlane(planeDataList,planeDimensions){
         ctx.rotate(planeData.angle + Math.PI);
         ctx.translate(-svgSize/2,-svgSize/2)
         
-        ctx.fillStyle = planeData.color+"55"
+        ctx.fillStyle = "#3339"//planeData.color+"99"
         ctx.fill(plane);
 
         ctx.setTransform(scaleX*universalScale,0,0,scaleY*universalScale,canvas.width/2+planeData.x,canvas.height/2+planeData.y)
@@ -119,6 +126,9 @@ function drawPlane(planeDataList,planeDimensions){
         
         ctx.fillStyle = planeData.color;
         ctx.fill(plane);
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = "#222";
+        ctx.stroke(plane);
     
         
         resetTransform();
@@ -142,12 +152,16 @@ function getSVGpath(modell){
 function playerColors(index){
     switch(index){
         case '0':
+        case 0:
             return "#A416DB";
         case '1':
+        case 1:
             return "#DB5F00"
         case '2':
+        case 2:
             return "#16C4DB"
         case '3':
+        case 3:
             return "#A2DB18";
             
     }
