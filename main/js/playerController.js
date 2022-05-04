@@ -3,26 +3,55 @@ import * as Util from './utility.js';
 
 
 export class PlayerController{
-    constructor(id,startPos){
+    constructor(id,startPos,rads,tiles){
+       
         this.id = id;
-        console.log(id)
         this.color = Util.playerColors(id);
         this.dice = []
-        this.planes = []
+        this.spentDie = null;
         
+        this.planes = []
+        this.planesTakingOff = []
+        
+        this.radiusValues = rads;
+        this.tileAmounts = tiles;
+
         this.startAng = startPos.angle;
         this.planesCreated = 0;
 
-       
+        this.needsToBeReDrawn = false;
     }
 
     
 
     update(gameHandler){
-       
+        this.needsToBeReDrawn = false;
         if(gameHandler.keyStates['q'] == 1){
             gameHandler.keyStates['q'] = -1;
-            this.planes.push(this.createPlane(this.id,gameHandler))
+            this.planesTakingOff.push(this.createPlane(this.id))
+        }
+
+       
+
+        if(gameHandler.timerReset){
+            
+            if(this.dice.length < 3){
+                this.dice.push( Math.ceil(Math.random()*6))
+                this.needsToBeReDrawn = true;
+            }
+
+            if(this.planesTakingOff.length > 0){
+                this.planes.push(this.planesTakingOff.shift());
+            }
+        }
+
+        if(this.spentDie != null){
+            if(this.dice[this.spentDie.index] == 6){
+                this.planesTakingOff.push(this.createPlane(this.id))
+            }
+            this.dice.splice(this.spentDie.index,1)
+            this.spentDie = null;
+            this.needsToBeReDrawn = true;
         }
 
         for(let p of this.planes){
@@ -36,16 +65,21 @@ export class PlayerController{
         return gameHandler;
     }
 
-    createPlane(id,gameHandler){
+    createPlane(id){
         console.log(id)
         let plane = new Plane(this.planesCreated,this.id); 
         this.planesCreated++;
         plane.layer = 1;
-        plane.tilesInCycle = gameHandler.tileAmounts[2];
-        plane.radius = gameHandler.radiuses[2];
+        plane.tilesInCycle = this.tileAmounts[2];
+        plane.radius = this.radiusValues[2];
         plane.angle = 0;
         console.log("created plane",plane);
         return plane;
+    }
+
+    spendDie(dieElement){
+        if(this.spentDie == null)
+        this.spentDie = {index:dieElement.getAttribute('index')}        
     }
 
 }

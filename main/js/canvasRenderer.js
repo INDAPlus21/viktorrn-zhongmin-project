@@ -32,7 +32,6 @@ function draw(drawData){
             case 'drawPlane':
                 drawPlane(data[1],data[2])
                 break;
-           
         }
     }
 }
@@ -127,6 +126,7 @@ function drawPlane(planeDataList,planeDimensions){
  
     
 }
+
 
 function resetTransform(){
     ctx.setTransform(universalScale, 0, 0, universalScale, canvas.width/2, canvas.height/2);

@@ -30,6 +30,12 @@ export function getSVGpath(modell){
     }
 }
 
+export function clearDOMElement(el){
+    while (el.firstChild) {
+        el.removeChild(el.lastChild);
+      }
+}
+
 export function linInterp(r1,r2,t){
     let r = r1 + (r2-r1)*(1-t);
     return r;

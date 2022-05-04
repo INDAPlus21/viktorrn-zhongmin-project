@@ -1,4 +1,5 @@
 import { PlayerController } from './playerController.js';
+import { drawUI } from './uiRenderer.js';
 import * as Util from './utility.js';
 const canvas = Util.$('boardScreen');
 const progressbarDOM = Util.$('progressBar');
@@ -16,7 +17,7 @@ const updateRateDOM = Util.$('updatesPerSecond');
                                          //       \\
          I        .o/ //O==---====ooooOOOO[o][o][o][o]OOOOOOoooo>>>>--....              // // 
         //      //    //    \ - /     O     [o]   [o]                [][][]OOoo.......// //--.. 
-      {<O>}====||==||[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]}--o
+      {<O>}====||==||[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]}--o
         \\      \\    \\    / - \     O     [o]   [o]                [][][]OOoo¨¨¨¨¨¨¨\\ \\--¨¨  
          I        ¨*\ \\O==---====ooooOOOO[o][o][o][o]OOOOOOoooo>>>>--¨¨¨¨              \\ \\ 
                                         \\       //
@@ -42,7 +43,9 @@ let onlineSocketObject = {
 let gameHandler = {
     layerAngleSpeeds:[],
     seccondsPerCycle:5,
+    
     timerValue:0,
+    timerReset:false,
 
     radiuses:[90,240,400],
     tileAmounts:[9,18,36],
@@ -58,6 +61,7 @@ let gameHandler = {
     frameBuffer: [],
     delta:1,
 
+    clientPlayer:0,
     players:[],
     planes: [],
     boardData:{
@@ -143,8 +147,8 @@ function createBoard(layers,boardData){
     return boardData;
 }
 
-function createPlayer(playerData){
-    let player = new PlayerController(0,{angle:0});
+function createPlayer(playerData,gameHandler){
+    let player = new PlayerController(0,{angle:0},gameHandler.radiuses,gameHandler.tileAmounts);
     console.log(player)
     return player;
 }
@@ -178,21 +182,34 @@ function update(renderWorker){
     updateRateDOM.innerHTML = "FPS: " + gameHandler.frameBuffer.length  ;
     gameHandler.planes = [];
 
+    gameHandler.timerReset = false;
+
     if(!gameHandler.pause)
     {
-        for(let player of gameHandler.players){
-            gameHandler = player.update(gameHandler);
-        }
-        
         gameHandler.timerValue += gameHandler.delta/gameHandler.seccondsPerCycle;
         if(gameHandler.timerValue >= 1){
             gameHandler.timerValue = 0;
+            gameHandler.timerReset = true;
         }
+
+        for(let player of gameHandler.players){
+            if(player == undefined || player == null) continue
+            gameHandler = player.update(gameHandler);
+        }
+        
     }
     
     gameHandler.timeSinceLastUpdate = currentTime;
     progressbarDOM.value = gameHandler.timerValue;
     
+    drawUI(
+        {
+            data:[
+                ['drawPlayer',gameHandler.players[gameHandler.clientPlayer]],
+            ]
+        }
+        
+    )
     draw(renderWorker)
 
 }
@@ -204,16 +221,18 @@ window.onload = () =>{
     gameHandler.boardData = createBoard(  [
         {radius: gameHandler.radiuses[2], tiles:gameHandler.tileAmounts[2], circleLayer:'outer' },
         {radius: gameHandler.radiuses[1], tiles:gameHandler.tileAmounts[1], circleLayer:'middle'},
-        {radius: gameHandler.radiuses[0], tiles:gameHandler.tileAmounts[0], circleLayer:'inner'  }],
+        {radius: gameHandler.radiuses[0], tiles:gameHandler.tileAmounts[0], circleLayer:'inner' }],
         gameHandler.boardData
         );    
     
-    gameHandler.players.push(createPlayer(1))
+    gameHandler.clientPlayer = 0;
     gameHandler.layerAngleSpeeds = calcLayerAngleSpeeds(gameHandler.tileAmounts,gameHandler.radiuses);
+    gameHandler.players[gameHandler.clientPlayer] = (createPlayer(gameHandler.clientPlayer,gameHandler))
+    
     console.log(gameHandler)
     // for rendering
     var offscreen = canvas.transferControlToOffscreen();
-    let renderWorker = new Worker('js/renderer.js'); 
+    let renderWorker = new Worker('js/canvasRenderer.js'); 
     
     renderWorker.postMessage( 
         {canvas: offscreen,
