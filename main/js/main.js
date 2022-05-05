@@ -142,11 +142,20 @@ function createBoard(layers,boardData){
         }
     }
 
-
+    let j = 0;
+    for(let i in boardData['outerTiles']){
+        if(i == 0) continue; 
+        let tile = boardData['outerTiles'][i];
+        if( (i - 1 - 2 )%(gameHandler.tileAmounts[2]/gameHandler.playerAmount) == 0 ){
+            tile.tileType = 'Passage';
+            //gameHandler.playerStartAngles[j] = tile.angle;
+            j+=1;
+        }
+    }
 
     //start positions
 
-    let j = 0;
+    j = 0;
     for(let i in boardData['outerTiles']){
         if(i == 0) continue; 
         let tile = boardData['outerTiles'][i];

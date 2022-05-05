@@ -1,7 +1,7 @@
 import * as Util from './utility.js';
 const diceKey = Util.$('diceHolder');
 
-export function drawUI(inData){
+export async function drawUI(inData){
     for(let data of inData.data){
         switch(data[0]){
             case 'drawPlayer':
@@ -14,7 +14,6 @@ export function drawUI(inData){
 
 function drawPlayer(playerData){
     if(!playerData.needsToBeReDrawn) return;
-    
     Util.clearDOMElement(diceKey);
     for(let ind in playerData.dice){
         let die = playerData.dice[ind];
