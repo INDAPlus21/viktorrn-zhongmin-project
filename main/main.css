@@ -24,6 +24,21 @@ section{
     height: 100%;
     opacity: 0.25;
     background-color: black;
+    -webkit-box-shadow: inset 0px 0px 500px 500px #000000; 
+    box-shadow: inset 0px 0px 500px 500px #000000;
+    
+}
+
+.borderDiv{
+    position: fixed;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+ 
+    -webkit-box-shadow: inset 0px 0px 200px 200px #00000081;
+    box-shadow: inset 0px 0px 200px 200px #00000081;
     
 }
 
@@ -51,18 +66,57 @@ section{
     display: block;
 }
 
+
+
+/* game UI */
+
+.progressBarContainer{
+    position: absolute;
+    margin: auto; 
+    right: 100px;
+    
+    top:100px;
+    height: 30px; width: 400px;
+    z-index: 1;
+}
+
+
+.planeCard{
+    background-color:rgb(114, 91, 67); border-radius: 10px; border:3px solid #161414; padding:0 10px;
+}
+
+.planeCard .diceContainer{
+    position: relative; 
+    display:inline-block; 
+    border:4px solid #211f1f; 
+    background-color: #696055;
+    border-radius: 7px;
+    margin:25px; 
+    height: 50px; 
+    width: 50px; 
+}
+
+.planeCard .cube{
+    position: absolute;
+    top:0;
+    left:0;
+    margin:-4px;
+}
+
+
 /* The dice  https://codepen.io/SteveJRobertson/pen/zxEwrK?editors=1111 */
+
 
 .cube {
     background: rgb(158, 44, 44);
     display: inline-block;
     position: relative;
-    width: 100px;
-    height: 100px;
+    width: 50px;
+    height: 50px;
     border: 4px solid #161414;
-    transform: scale(0.5);
+    
     transition: transform 0.1s cubic-bezier(0,1,1,1);
-    margin: 0 -20px;  
+    margin: 0 10px;  
     
     font-family: Arial, Helvetica, sans-serif;
     font-size: 500%;
@@ -70,42 +124,42 @@ section{
     border-radius: 10px;
   }
 
-.cube:hover{
-    transform: scale(0.7);
+#diceHolder .cube:hover{
+    transform: scale(1.2);
 }
 
 .dot {
     display: block;
     position: absolute;
-    width: 24px;
-    height: 24px;
+    width: calc(0.5*24px);
+    height: calc(0.5*24px);
     background: #fff;
     border-radius: 50%;  
   }
   
-  .d1 .dot1 { top: calc(50px - 12px); left: calc(50px - 12px) }
+  .d1 .dot1 { top: calc( 0.5*(50px - 12px)); left: calc( 0.5*(50px - 12px)) }
 
-  .d2 .dot1 { top: calc(20px - 12px); left: calc(20px - 12px) }
-  .d2 .dot2 { top: calc(80px - 12px); left: calc(80px - 12px) }
+  .d2 .dot1 { top: calc(0.5*(20px - 12px)); left: calc(0.5*(20px - 12px)) }
+  .d2 .dot2 { top: calc(0.5*(80px - 12px)); left: calc(0.5*(80px - 12px)) }
 
-  .d3 .dot1 { top: calc(20px - 12px); left: calc(20px - 12px) }
-  .d3 .dot2 { top: calc(50px - 12px); left: calc(50px - 12px) }
-  .d3 .dot3 { top: calc(80px - 12px); left: calc(80px - 12px) }
+  .d3 .dot1 { top: calc(0.5*(20px - 12px)); left: calc(0.5*(20px - 12px)) }
+  .d3 .dot2 { top: calc(0.5*(50px - 12px)); left: calc(0.5*(50px - 12px)) }
+  .d3 .dot3 { top: calc(0.5*(80px - 12px)); left: calc(0.5*(80px - 12px)) }
   
-  .d4 .dot1 {  top: calc(20px - 12px); left: calc(20px - 12px) }
-  .d4 .dot2 {  top: calc(80px - 12px); left: calc(20px - 12px) }
-  .d4 .dot3 {  top: calc(20px - 12px); left: calc(80px - 12px) }
-  .d4 .dot4 {  top: calc(80px - 12px); left: calc(80px - 12px) }
+  .d4 .dot1 {  top: calc(0.5*(20px - 12px)); left: calc(0.5*(20px - 12px)) }
+  .d4 .dot2 {  top: calc(0.5*(80px - 12px)); left: calc(0.5*(20px - 12px)) }
+  .d4 .dot3 {  top: calc(0.5*(20px - 12px)); left: calc(0.5*(80px - 12px)) }
+  .d4 .dot4 {  top: calc(0.5*(80px - 12px)); left: calc(0.5*(80px - 12px)) }
 
-  .d5 .dot1 { top: calc(20px - 12px); left: calc(20px - 12px) }
-  .d5 .dot2 { top: calc(80px - 12px); left: calc(20px - 12px) }
-  .d5 .dot3 { top: calc(50px - 12px); left: calc(50px - 12px) }
-  .d5 .dot4 { top: calc(20px - 12px); left: calc(80px - 12px) }
-  .d5 .dot5 { top: calc(80px - 12px); left: calc(80px - 12px) }
+  .d5 .dot1 { top: calc(0.5*(20px - 12px)); left: calc(0.5*(20px - 12px)) }
+  .d5 .dot2 { top: calc(0.5*(80px - 12px)); left: calc(0.5*(20px - 12px)) }
+  .d5 .dot3 { top: calc(0.5*(80px - 12px)); left: calc(0.5*(80px - 12px)) }
+  .d5 .dot4 { top: calc(0.5*(20px - 12px)); left: calc(0.5*(80px - 12px))}
+  .d5 .dot5 { top: calc(0.5*(80px - 12px)); left: calc(0.5*(80px - 12px)) }
 
-  .d6 .dot1 { top: calc(20px - 12px); left: calc(20px - 12px) }
-  .d6 .dot2 { top: calc(20px - 12px); left: calc(50px - 12px) }
-  .d6 .dot3 { top: calc(20px - 12px); left: calc(80px - 12px) }
-  .d6 .dot4 { top: calc(80px - 12px); left: calc(20px - 12px) }
-  .d6 .dot5 { top: calc(80px - 12px); left: calc(50px - 12px) }
-  .d6 .dot6 { top: calc(80px - 12px); left: calc(80px - 12px) }
+  .d6 .dot1 { top: calc(0.5*(20px - 12px)); left: calc(0.5*(20px - 12px)) }
+  .d6 .dot2 { top: calc(0.5*(20px - 12px)); left: calc(0.5*(50px - 12px)) }
+  .d6 .dot3 { top: calc(0.5*(20px - 12px)); left: calc(0.5*(80px - 12px))}
+  .d6 .dot4 { top: calc(0.5*(80px - 12px)); left: calc(0.5*(20px - 12px)) }
+  .d6 .dot5 { top: calc(0.5*(80px - 12px)); left: calc(0.5*(50px - 12px)) }
+  .d6 .dot6 { top: calc(0.5*(80px - 12px)); left: calc(0.5*(80px - 12px)) }

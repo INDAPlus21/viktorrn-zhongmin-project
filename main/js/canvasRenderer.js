@@ -65,10 +65,11 @@ function drawBoard(BoardDrawingData,tileDimensions,tilesOccupied){
                     ctx.strokeStyle = '#222'
                 break;
                 case 'Passage':
-                    ctx.fillStyle = 'ddd';
+                    ctx.fillStyle = '#ddd';
                     ctx.strokeStyle = '#222'
                     break;
                 default:
+                    
                     ctx.fillStyle = tileDimensions.dotColor;
                     if(tilesOccupied[key][i] != undefined){
                         ctx.fillStyle = playerColors(tilesOccupied[key][i].playerId)+"bb";

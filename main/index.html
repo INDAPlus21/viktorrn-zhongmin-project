@@ -10,16 +10,26 @@
         <section id="gameScreen" class="displaying" style="background-image: url(../art/backgroundTest1.jpg);">
            
             <div class="opacityDiv"></div>
+            <div class="borderDiv"></div>
             <span style="position:absolute; margin:20px; font-size: 1em; font-weight: 1; color:aliceblue"id="updatesPerSecond"> 10</span>
            
             <canvas id="boardScreen"></canvas>
-            <div style="position: aboslute; margin-top: 20px; margin-inline: auto; height: 30px; width: 400px;">
+            <div class="progressBarContainer">
                 <progress value="0.5" id="progressBar" style="border: 3px solid #333; height: 30px; width: 400px;"> </progress>
             </div>
             <div id="playerUI">
                 <div id="diceHolder" style=" position: absolute; left:100px;top:100px;">
                     
                 </div>
+                <div id="planeCardHolder" style="position:absolute;  left:100px; top:200px;">
+                    <div class="planeCard">
+                        <img style="width:100px; " src="../art/Plane1.svg">
+                        <div class="diceContainer">
+                            <!--<div class="cube d1"><div class="dot dot1"></div></div>-->
+                        </div>
+                        
+                    </div> 
+                </div> 
             </div>
            
             
