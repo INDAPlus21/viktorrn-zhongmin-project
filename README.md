@@ -35,6 +35,8 @@ Begin by downloading the entire repository. Make sure [Node.js](https://nodejs.o
 Run the game with:
 ```node index.js```
 
+=======
+
 # Documentation lingo
 
 ## Issues
@@ -67,4 +69,3 @@ Commits are to be short and concice written in Past simple tense (example "I wor
 # Authors and developers githandles
 
 viktorrn & Zhongmin
-
