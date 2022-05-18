@@ -93,19 +93,24 @@ section{
 
 #planeCardHolder{
     position:absolute;  
-    left:25px; 
-    top:170px;
-    
-    display: inline-block;
+    left:50px; 
+    top:330px;
+    max-width: 300px;
+   
+
+}
+
+#startCard .cube{
+    position: absolute;
+    margin: -4px;
 }
 
 #planeCardHolder .planeCard{
     background-color:rgb(114, 91, 67); border-radius: 10px; border:3px solid #161414; padding:0 10px;
     display: inline-block;
     width: 215px;
-    position:absolute;  
-    left:25px; 
-    top:170px;
+    position:relative;  
+    margin: 0 0 10px 0;
     
     display: inline-block;
 }
@@ -118,7 +123,7 @@ section{
 }
 
 .diceContainer{
-    position: relative; 
+    position: relative;
     display:inline-block; 
     border:4px solid #211f1f; 
     background-color: #696055;
@@ -192,7 +197,7 @@ section{
     border-radius: 50%;  
   }
   
-  .d1 .dot1 { top: calc( 0.5*(50px - 12px)); left: calc( 0.5*(50px - 12px)) }
+  .d1 .dot1 { top: calc(0.5*(50px - 12px)); left: calc(0.5*(50px - 12px)) }
 
   .d2 .dot1 { top: calc(0.5*(20px - 12px)); left: calc(0.5*(20px - 12px)) }
   .d2 .dot2 { top: calc(0.5*(80px - 12px)); left: calc(0.5*(80px - 12px)) }
@@ -208,8 +213,8 @@ section{
 
   .d5 .dot1 { top: calc(0.5*(20px - 12px)); left: calc(0.5*(20px - 12px)) }
   .d5 .dot2 { top: calc(0.5*(80px - 12px)); left: calc(0.5*(20px - 12px)) }
-  .d5 .dot3 { top: calc(0.5*(80px - 12px)); left: calc(0.5*(80px - 12px)) }
-  .d5 .dot4 { top: calc(0.5*(20px - 12px)); left: calc(0.5*(80px - 12px))}
+  .d5 .dot3 { top: calc(0.5*(50px - 12px));left:calc( 0.5*(50px - 12px)) }
+  .d5 .dot4 { top: calc(0.5*(20px - 12px)); left: calc(0.5*(80px - 12px)) }
   .d5 .dot5 { top: calc(0.5*(80px - 12px)); left: calc(0.5*(80px - 12px)) }
 
   .d6 .dot1 { top: calc(0.5*(20px - 12px)); left: calc(0.5*(20px - 12px)) }

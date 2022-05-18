@@ -104,28 +104,26 @@ function drawPlane(planeDataList,planeDimensions){
         let svgSize = 400;
         let scaleX = planeDimensions.width/svgSize
         let scaleY = planeDimensions.height/svgSize
-        let ang = planeData.angle;
+        let ang = planeData.drawAngle;
 
-        speed = 2*Math.PI* (1/planeData.tilesInCycle)/10;
+        speed = 2*Math.PI* (1/planeData.tilesInCycle)/1;
         
-        planeData.x = planeData.radius * Math.cos(ang);
-        planeData.y = planeData.radius * Math.sin(ang);
     
-        let shadowX = (planeData.radius+30) * Math.cos(ang);
-        let shadowY = (planeData.radius+30) * Math.sin(ang);
+        let shadowX = planeData.x + 30 * Math.cos(ang);
+        let shadowY = planeData.y + 30 * Math.sin(ang);
         let shadowScaleX = 1.1;
         let shadowScaleY = 1.1;
     
     
         ctx.setTransform(scaleX*universalScale*shadowScaleX,0,0,scaleY*universalScale*shadowScaleY,canvas.width/2+shadowX,canvas.height/2+shadowY)
-        ctx.rotate(planeData.angle + Math.PI);
+        ctx.rotate(planeData.drawAngle + Math.PI);
         ctx.translate(-svgSize/2,-svgSize/2)
         
         ctx.fillStyle = "#3339"//planeData.color+"99"
         ctx.fill(plane);
 
         ctx.setTransform(scaleX*universalScale,0,0,scaleY*universalScale,canvas.width/2+planeData.x,canvas.height/2+planeData.y)
-        ctx.rotate(planeData.angle + Math.PI);
+        ctx.rotate(planeData.drawAngle + Math.PI);
         ctx.translate(-svgSize/2,-svgSize/2)
         
         ctx.fillStyle = planeData.color;

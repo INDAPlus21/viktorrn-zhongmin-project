@@ -36,9 +36,9 @@ export function clearDOMElement(el){
       }
 }
 
-export function linInterp(r1,r2,t){
-    let r = r1 + (r2-r1)*(1-t);
-    return r;
+export function linInterp(v1,v2,t){
+    let v = v1 + (v2-v1)*t;
+    return v;
 }
 
 export function quadBezCurve(p0,p1,p2,t){

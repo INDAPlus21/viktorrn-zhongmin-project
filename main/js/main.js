@@ -42,10 +42,11 @@ let onlineSocketObject = {
 
 let gameHandler = {
     layerAngleSpeeds:[],
-    seccondsPerCycle:5,
+    seccondsPerCycle:1,
     
     timerValue:0,
     timerReset:false,
+    time:0,
 
     radiuses:[90,240,400],
     tileAmounts:[9,18,36],
@@ -161,12 +162,16 @@ function createBoard(layers,boardData){
     //start positions
 
     j = 0;
-    for(let i in boardData['outerTiles']){
+    
+   for(let i in boardData['outerTiles'])
+   {
         if(i == 0) continue; 
         let tile = boardData['outerTiles'][i];
-        if( (i - 1 + 4 )%(gameHandler.tileAmounts[2]/gameHandler.playerAmount) == 0 ){
+        if( (i - 1 + 4 )%(gameHandler.tileAmounts[2]/gameHandler.playerAmount) == 0 )
+        {
             tile.tileType = j+'Start';
             gameHandler.playerStartAngles[j] = tile.angle;
+            console.log(tile.angle)
             j+=1;
         }
     }
@@ -203,9 +208,10 @@ function draw(renderWorker){
 
 function update(renderWorker){
     var currentTime = new Date();
+    
     currentTime = currentTime.getTime();
     gameHandler.delta = (currentTime - gameHandler.timeSinceLastUpdate)/1000;
-    
+    gameHandler.time += gameHandler.delta;
     const now = performance.now();
     while (gameHandler.frameBuffer.length > 0 && gameHandler.frameBuffer[0] <= now - 1000) 
     {
@@ -255,6 +261,8 @@ function update(renderWorker){
 
 }
 
+
+
 window.onload = () =>{
     
     //set up
@@ -267,7 +275,7 @@ window.onload = () =>{
         );    
     gameHandler.diePools = generateDiePools();
 
-
+    gameHandler.time = 0;
     gameHandler.clientPlayer = 0;
     gameHandler.layerAngleSpeeds = calcLayerAngleSpeeds(gameHandler.tileAmounts,gameHandler.radiuses);
     gameHandler.players[gameHandler.clientPlayer] = (createPlayer(gameHandler.clientPlayer,gameHandler))
@@ -286,9 +294,9 @@ window.onload = () =>{
         [offscreen]
     )
     renderWorker.onmessage = (e) =>{
-        update(renderWorker);
+        //update(renderWorker);
     }
-   
+    setInterval(()=>{update(renderWorker)},1000/144)
 
     //for inputs
 
@@ -296,6 +304,13 @@ window.onload = () =>{
        gameHandler.keyStates[e.key] = 1;
 
         switch(e.key){
+            case 's':
+                for(let plane of  gameHandler.players[gameHandler.clientPlayer].planes){
+                    plane.transition((plane.layer + 1) % 3);
+                    
+                }
+               
+                break;
             case 'r':
                 for(let player of gameHandler.players){
                     for(let p of player.planes){
@@ -316,6 +331,10 @@ window.onload = () =>{
 
     window.onkeyup = (e)=>{
         gameHandler.keyStates[e.key] = 0;
+    }
+
+    Util.$('gameScreen').onclick = (e)=>{
+        gameHandler.players[gameHandler.clientPlayer].dieSelected = null;
     }
 }
 
