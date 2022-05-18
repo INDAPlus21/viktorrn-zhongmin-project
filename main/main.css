@@ -70,6 +70,8 @@ section{
 
 /* game UI */
 
+
+
 .progressBarContainer{
     position: absolute;
     margin: auto; 
@@ -101,6 +103,11 @@ section{
     background-color:rgb(114, 91, 67); border-radius: 10px; border:3px solid #161414; padding:0 10px;
     display: inline-block;
     width: 215px;
+    position:absolute;  
+    left:25px; 
+    top:170px;
+    
+    display: inline-block;
 }
 
 .planeIcon{
@@ -130,6 +137,20 @@ section{
 
 }
 
+.diceContainer .addDie{
+    position: absolute;
+    font-weight: bolder;
+    font-size: 4em;
+    color:rgba(237, 233, 233);
+    
+    line-height: 50px;
+    margin: 0 7px;
+    display: none;
+}
+
+.diceContainer .addDie:hover{
+    transform: scale(1.1)
+}
 
 /* The dice  https://codepen.io/SteveJRobertson/pen/zxEwrK?editors=1111 */
 
@@ -158,8 +179,8 @@ section{
 
 #diceHolder .selected{
     transform: scale(1.2);
-    -webkit-box-shadow: 0px 0px 20px 3px #ffffffc6;
-    box-shadow: 0px 0px 20px 3px #ffffffc6;
+    -webkit-box-shadow: 0px 0px 5px 3px rgba(237, 233, 233, 0.75);
+    box-shadow: 0px 0px 5px 3px rgba(237, 233, 233, 0.75);
 }
 
 .dot {
@@ -167,7 +188,7 @@ section{
     position: absolute;
     width: calc(0.5*24px);
     height: calc(0.5*24px);
-    background: #fff;
+    background: rgba(237, 233, 233);
     border-radius: 50%;  
   }
   

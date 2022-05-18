@@ -19,16 +19,8 @@ function drawPlayer(playerData){
     for(let ind in playerData.dice){
         
         let die = playerData.dice[ind];
-        let dieDiv = document.createElement('div');
-        dieDiv.setAttribute('value',die);
+        let dieDiv = generateDie(die);
         dieDiv.setAttribute('index',ind);
-        dieDiv.classList.add('cube',('d'+die))
-        
-        for(let i = 1; i <= die;i++){
-            let dot = document.createElement('div');
-            dot.classList.add('dot',('dot'+i));
-            dieDiv.appendChild(dot);
-        }
 
         dieDiv.onpointerdown = (e) =>{
             playerData.klickedDie(dieDiv)
@@ -42,18 +34,62 @@ function drawPlayer(playerData){
     for(let ind in playerData.planes){
         let card = document.createElement('div');
         card.setAttribute('index',ind);
+        card.classList.add("planeCard");
+        let icon = document.createElement("div");
+        let diceContainer = document.createElement("div");
+        let addDie = document.createElement('span');
+        addDie.innerHTML = "+";
+        addDie.classList.add("addDie");
+        icon.classList.add("planeIcon");
+        diceContainer.classList.add("diceContainer");
+        diceContainer.appendChild(addDie);
+        card.appendChild(icon);
+        card.appendChild(diceContainer);
+        planeCardKey.appendChild(card);
 
+        if(playerData.dieSelected == null) continue;
+            addDie.style.display = "block";
+            diceContainer.onpointerdown = (e,ind) =>
+            {
+                playerData.klickedAddDieToPlane(index);
+            } 
+
+        if(playerData.planes.die != null)
+        {
+
+        }
     }
-    /*<div class="planeCard" id="planeCardHolder">
-                        <div class="planeIcon" ></div>
-                        <div class="diceContainer">
-                            <!--<div class="cube d1"><div class="dot dot1"></div></div>-->
-                        </div>
-                        
-                    </div>  */
-    if(playerData.dieSelected != null)
+    Util.$("startCard").childNodes[3].childNodes[1].style.display = "none";
+    
+    if(playerData.dieSelected == null) return;
+    Util.$("startCard").childNodes[3].childNodes[1].style.display = "block";
+
+    Util.$("startCard").childNodes[3].onpointerdown =(e) =>
     {
+        playerData.klickedStartPlane();
+    } 
 
+    if(playerData.spentDie == null) return
+    
+    let die = playerData.dice[playerData.spentDie.index];
+    let dieDiv = generateDie(die);
+    Util.$("startCard").childNodes[3].appendChild(dieDiv);
+    
+
+    
+
+
+}
+
+function generateDie(die){
+    let dieDiv = document.createElement('div');
+    dieDiv.setAttribute('value',die);
+    dieDiv.classList.add('cube',('d'+die))
+    
+    for(let i = 1; i <= die;i++){
+        let dot = document.createElement('div');
+        dot.classList.add('dot',('dot'+i));
+        dieDiv.appendChild(dot);
     }
-
+    return dieDiv;
 }

@@ -104,18 +104,22 @@ export class PlayerController{
     }
 
     klickedDie(dieElement){
-        
         this.dieSelected = {index:Number(dieElement.getAttribute('index'))}
-        //this.needsToBeReDrawn = true;
-    
-        
-        //console.log(this.needsToBeReDrawn)
     }
+
+    klickedAddDieToPlane(index){
+        //this.planes[index].
+    }
+
+    klickedStartPlane(){
+        if(this.spentDie == null)
+        this.spentDie = {index:this.dieSelected.index}       
+    }
+
 
     spendDie(dieElement)
     {
-        if(this.spentDie == null)
-        this.spentDie = {index:dieElement.getAttribute('index')}        
+         
     }
 
 }
@@ -134,6 +138,7 @@ class Plane{
         this.layer;
         this.tileIndex;
         this.interPolations = [];
+        this.die = null;
         return this;
     }
 }
