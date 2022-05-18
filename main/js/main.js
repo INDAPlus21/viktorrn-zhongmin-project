@@ -75,7 +75,15 @@ let gameHandler = {
         innerTiles: [],
         middleTiles:[],
         outerTiles: []
-    }
+    },
+
+    getPlayer(id){
+        return this.players[id];
+    },
+
+    diePools:[
+       
+    ]
 }
 
 let tileDimensions = {
@@ -92,9 +100,6 @@ let planeDimensions = {
 }
 
 
-let camera = {
-    
-}
 
 // preload stuff
 
@@ -169,6 +174,12 @@ function createBoard(layers,boardData){
 
    
     return boardData;
+}
+
+function generateDiePools(){
+    [1,1,2,3,4,5,6,6],
+    [],
+    []
 }
 
 function createPlayer(playerIndex,gameHandler){
@@ -254,7 +265,9 @@ window.onload = () =>{
         {radius: gameHandler.radiuses[2], tiles:gameHandler.tileAmounts[2], circleLayer:'outer' }, ],
         gameHandler.boardData
         );    
-    
+    gameHandler.diePools = generateDiePools();
+
+
     gameHandler.clientPlayer = 0;
     gameHandler.layerAngleSpeeds = calcLayerAngleSpeeds(gameHandler.tileAmounts,gameHandler.radiuses);
     gameHandler.players[gameHandler.clientPlayer] = (createPlayer(gameHandler.clientPlayer,gameHandler))
@@ -304,4 +317,8 @@ window.onload = () =>{
     window.onkeyup = (e)=>{
         gameHandler.keyStates[e.key] = 0;
     }
+}
+
+export function getGameHandler(){
+    return gameHandler;
 }
