@@ -21,6 +21,7 @@ export class PlayerController{
         this.startAngle = startPos.angle;
         this.startTile = startTile;
         this.activePlanes = 0;
+        this.maxActivePlanes = 4;
         this.planesCompleted = 0;
 
         this.needsToBeReDrawn = false;
@@ -62,7 +63,7 @@ export class PlayerController{
             {
                 if(this.spentDie == 6 || this.spentDie  == 1)
                 {
-                    if(this.activePlanes < 3)
+                    if(this.activePlanes < this.maxActivePlanes)
                     {
                         this.planesTakingOff.push(this.createPlane(this.id))
                     }
@@ -159,7 +160,16 @@ export class PlayerController{
         return gameHandler;
     }
 
-   
+   resetPlayer(){
+       this.planes = [];
+       this.activePlanes = 0;
+       this.dieSelected = null;
+       this.planesCompleted = 0;
+       this.dice = [];
+       this.planesTakingOff = [];
+       this.spentDie = null;
+       
+   }
 
     createPlane(creationTime)
     {

@@ -2,6 +2,7 @@ import * as Util from './utility.js';
 const diceKey = Util.$('diceHolder');
 const planeCardKey = Util.$('planeCardHolder');
 const starterCardKey = Util.$("startCard");
+const scoreKey = Util.$("score")
 
 export async function drawUI(inData){
     for(let data of inData.data){
@@ -20,6 +21,8 @@ function drawPlayer(playerData)
     //if(!playerData.needsToBeReDrawn) return;
     drawPlayerDice(playerData);
     drawPlayerPlaneCards(playerData);
+    scoreKey.innerHTML = "Score: "+playerData.planesCompleted;
+
 
     let startCardDieContainer = starterCardKey.childNodes[3];
     

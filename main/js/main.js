@@ -89,7 +89,10 @@ function update(renderWorker){
     currentTime = currentTime.getTime();
     gameHandler.delta = (currentTime - gameHandler.timeSinceLastUpdate)/1000;
     gameHandler.time = currentTime;
-     
+
+    let timeLeft = (gameHandler.maxTime + (gameHandler.startTime - gameHandler.time))
+    Util.$('timeLeft').innerHTML = "Time: " + timeLeft;
+    gameHandler.testIfDone(timeLeft);
 
     const now = performance.now();
     while (gameHandler.frameBuffer.length > 0 && gameHandler.frameBuffer[0] <= now - 1000) 
@@ -136,6 +139,7 @@ function update(renderWorker){
         }
         
     )
+
     draw(renderWorker)
 
 }
@@ -155,7 +159,8 @@ window.onload = () =>{
     gameHandler.clientPlayer = 0;
     gameHandler.layerAngleSpeeds = gameHandler.calcLayerAngleSpeeds(gameHandler.tileAmounts,gameHandler.radiuses);
     gameHandler.players[gameHandler.clientPlayer] = (gameHandler.createPlayer(gameHandler.clientPlayer,gameHandler))
-    
+    gameHandler.resetGame();
+
     console.log(gameHandler)
     // for rendering
     var offscreen = canvas.transferControlToOffscreen();
@@ -195,10 +200,9 @@ window.onload = () =>{
                    
                     break;
             case 'r':
+                gameHandler.resetGame();
                 for(let player of gameHandler.players){
-                    for(let p of player.planes){
-                        p.angle = 0;   
-                    }
+                    player.resetPlayer();
                 }
                 gameHandler.timerValue = 0;
                 break;
