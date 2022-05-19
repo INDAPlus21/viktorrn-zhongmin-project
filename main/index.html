@@ -5,9 +5,12 @@
     </head>
     <body>
         <section id="preGameScreen">
-            
+            <input id="serverIP" value="" placeholder="4-letter join code" type="text"><br>
+            <input id="loginPlayerName" value="" placeholder="Username" type="text" maxlength="40"><br>
+            <button id="joinServerBtn">Join Server</button><br>
+            <div id="loginErrorText"></div>
         </section>
-        <section id="gameScreen" class="displaying" style="background-image: url(../art/backgroundTest1.jpg); ">
+        <section id="gameScreen" class="displaying">
            
             <div class="opacityDiv" id="opacityDiv"></div>
             <div class="borderDiv"></div>
@@ -15,7 +18,7 @@
            
             <canvas id="boardScreen"></canvas>
             <div class="progressBarContainer">
-                <progress value="0.5" id="progressBar" style="border: 3px solid #333; height: 30px; width: 400px;"> </progress>
+                <progress value="0.5" id="progressBar" style="display:none; border: 3px solid #333; height: 30px; width: 400px;"> </progress>
             </div>
             <div id="playerUI">
                 <div id="diceHolder" style=" position: absolute; left:50px;top:100px;">

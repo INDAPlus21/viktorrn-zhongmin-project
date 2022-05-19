@@ -1,10 +1,10 @@
-import { getGameHandler } from './main.js';
+
 import * as Util from './utility.js';
 
 
 
 export class PlayerController{
-    constructor(id,startPos,rads,tiles)
+    constructor(id,startPos,rads,tiles,startTile)
     {
        
         this.id = id;
@@ -19,27 +19,24 @@ export class PlayerController{
         this.tileAmounts = tiles;
 
         this.startAngle = startPos.angle;
-        this.planesCreated = 0;
+        this.startTile = startTile;
+        this.activePlanes = 0;
+        this.planesCompleted = 0;
 
         this.needsToBeReDrawn = false;
         
         this.dieSelected = null; 
         this.overPlane = null;
 
-        
+        this.name = "";   
         
     }
 
-    
+    setName(name){
+        this.name = name;
+    }
 
     update(gameHandler){
-        
-        this.needsToBeReDrawn = false;
-        if(gameHandler.keyStates['q'] == 1)
-        {
-            gameHandler.keyStates['q'] = -1;
-            this.planesTakingOff.push(this.createPlane(gameHandler.time))
-        }
 
         this.needsToBeReDrawn = true;
 
@@ -57,43 +54,103 @@ export class PlayerController{
                         this.dieSelected = null;
                     }
                 }
-
             }
 
             this.dice.push( Math.ceil(Math.random()*6))
-            this.needsToBeReDrawn = true;
-
             
             if(this.spentDie != null)
             {
                 if(this.spentDie == 6 || this.spentDie  == 1)
                 {
-                    this.planesTakingOff.push(this.createPlane(this.id))
+                    if(this.activePlanes < 3)
+                    {
+                        this.planesTakingOff.push(this.createPlane(this.id))
+                    }
+                    
                 }
-                //this.dice.splice(this.spentDie.index,1)
+                
                 this.spentDie = null;
-                this.needsToBeReDrawn = true;
             }
 
             if(this.planesTakingOff.length > 0)
             {
                 let plane = this.planesTakingOff.shift();
-                plane.startAngle = this.startAngle;
                 plane.creationTime = gameHandler.time;
+                plane.startAngle = this.startAngle;
+                
                 this.planes.push(plane);
             }
  
             
         }
 
-
-        for(let p of this.planes)
+        for(let i in this.planes)
         {
+            let p = this.planes[i];
             p.update(gameHandler);
-            p.tileIndex = 1+Math.ceil((p.angle/(Math.PI*2))*gameHandler.tileAmounts[p.layer]) 
-            gameHandler.tilesOccupied[ Object.keys(gameHandler.tilesOccupied)[p.layer] ][p.tileIndex] = ({playerId: this.id});   
+            let tile = p.calculateTile(gameHandler);
+            
+            if(p.tileIndex != tile)
+            {
+                p.tileIndex = tile;
+
+                switch(p.layer)
+                {
+                    case 0:
+                        if(p.tileIndex == p.enterdLayerOnTile)
+                        {
+                            p.LapsInMiddle++;
+                            if(p.LapsInMiddle >= 2)
+                            {
+                                p.completedMiddleRun = true;
+                            }
+                        }
+                    break;
+
+                    case 2:
+                        if(p.completedMiddleRun)
+                        {
+                            if(tile == this.startTile){
+                                console.log("completed run")
+                                this.planes.splice(i,1);
+                                this.activePlanes--;
+                                this.planesCompleted++;
+                            }
+                        }
+                        break;
+                }
+
+                if(p.die  != null)
+                {
+                    let l = Object.keys(gameHandler.tilesOccupied)[p.layer];
+                    if(gameHandler.boardData[l][p.tileIndex].tileType == "Passage")
+                    {
+                        console.log("passed passage with die",p.die)
+                        if(gameHandler.boardData[l][p.tileIndex].inCost.includes(p.die))
+                        {
+
+                            p.transition(p.layer-1)
+                            p.die = null;
+                            p.enterdLayerOnTile = tile;
+                        }
+                        
+                        if(gameHandler.boardData[l][p.tileIndex].outCost.includes(p.die))
+                        {
+                            p.LapsInMiddle = 0;
+                            p.enterdLayerOnTile = tile;
+                            p.transition(p.layer+1)
+                            p.die = null;
+                        }
+                    }
+                }
+            }
+            
+            if(p == null || p == undefined) continue;
+            gameHandler.tilesOccupied[ Object.keys(gameHandler.tilesOccupied)[p.layer] ][p.tileIndex+1] = ({playerId: this.id});   
             gameHandler.planes.push(p);
         }
+
+        
         
         return gameHandler;
     }
@@ -102,8 +159,8 @@ export class PlayerController{
 
     createPlane(creationTime)
     {
-        let plane = new Plane(this.planesCreated,this.id); 
-        this.planesCreated++;
+        let plane = new Plane(this.activePlanes,this.id); 
+        this.activePlanes++;
         plane.layer = 2;
         plane.tilesInCycle = this.tileAmounts[2];
         plane.radius = this.radiusValues[2];
@@ -124,24 +181,22 @@ export class PlayerController{
             return
         }
         this.planes[index].die = this.spendSelectedDie();
-        console.log( this.planes[index]) 
     }
 
     klickedStartPlane(){
         if(this.spentDie == null)
         this.spentDie = this.spendSelectedDie();
+
     }
 
 
     spendSelectedDie()
     {
+        if(this.dieSelected == null) return null;
         let removedDie = this.dice.splice(this.dieSelected.index,1)
         this.dieSelected = null;
         return removedDie[0];
     }
-
-
-
 }
 
 
@@ -156,16 +211,27 @@ class Plane{
         this.radius;
         this.angle;
         this.startAngle;
+        this.startTile;
+
         this.drawAngle;
         this.tilesInCycle;
+
+        this.LapsInMiddle = 0;
+        this.enterdLayerOnTile;
+        this.completedMiddleRun = false;
         
         this.layer;
         this.prevLayer;
+        
         this.tileIndex;
+
+        this.onTile;
+
         this.interp = 1;
         this.shadow = null
 
         this.die = null;
+        this.spentDie = null;
         this.creationTime = null;
         return this;
     }
@@ -231,11 +297,25 @@ class Plane{
     }
     
     updateAngle(gameHandler){
-        let base_vel = (Math.PI*2)/(2*gameHandler.seccondsPerCycle);
+        let base_vel = (Math.PI*2)/( gameHandler.secondsPerCycle);
         let layer_multiplier = gameHandler.tileAmounts[0]/gameHandler.tileAmounts[this.layer];
-    
-        this.angle += gameHandler.delta * base_vel * layer_multiplier;
         this.angle %= Math.PI * 2;
+        this.angle += gameHandler.delta * base_vel * layer_multiplier;
+        
+    }
+
+    calculateTile(gameHandler){
+        let layer_tiles = gameHandler.tileAmounts[this.layer];
+        let offset = Math.PI/layer_tiles;
+        let angleNorm = ( this.angle -offset )/(Math.PI*2);
+        
+        let tileIndex = Math.ceil( (angleNorm )* layer_tiles ) 
+        tileIndex %= layer_tiles;
+        return tileIndex;
+    }
+
+    klickedOnPlaneDie(e){
+        this.die = null;
     }
 }
 

@@ -96,6 +96,11 @@ function drawPlayerPlaneCards(playerData){
         if(plane.die != null) 
         {
             let dieDiv = generateDieDiv(plane.die);
+            
+            diceContainer.onpointerdown = (e) =>
+            {
+                plane.klickedOnPlaneDie();
+            }
             diceContainer.appendChild(dieDiv);
         }
     }
