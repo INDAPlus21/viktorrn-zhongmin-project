@@ -88,7 +88,7 @@ export class PlayerController{
         {
             let p = this.planes[i];
             p.update(gameHandler);
-            let tile = p.calculateTile(gameHandler);
+            let tile = p.calculateTile(gameHandler,p.layer);
             
             if(p.tileIndex != tile)
             {
@@ -100,9 +100,11 @@ export class PlayerController{
                         if(p.tileIndex == p.enterdLayerOnTile)
                         {
                             p.LapsInMiddle++;
-                            if(p.LapsInMiddle >= 2)
+                            console.log(p.LapsInMiddle)
+                            if(p.LapsInMiddle >= gameHandler.lapsToWin)
                             {
                                 p.completedMiddleRun = true;
+                                console.log(p.completedMiddleRun)
                             }
                         }
                     break;
@@ -131,15 +133,17 @@ export class PlayerController{
 
                             p.transition(p.layer-1)
                             p.die = null;
-                            p.enterdLayerOnTile = tile;
+                            p.enterdLayerOnTile = p.calculateTile(gameHandler,p.layer);
+                            console.log(p.enterdLayerOnTile)
                         }
                         
                         if(gameHandler.boardData[l][p.tileIndex].outCost.includes(p.die))
                         {
                             p.LapsInMiddle = 0;
-                            p.enterdLayerOnTile = tile;
+                            p.enterdLayerOnTile = p.calculateTile(gameHandler,p.layer);
                             p.transition(p.layer+1)
                             p.die = null;
+                            console.log(p.enterdLayerOnTile)
                         }
                     }
                 }
@@ -304,8 +308,8 @@ class Plane{
         
     }
 
-    calculateTile(gameHandler){
-        let layer_tiles = gameHandler.tileAmounts[this.layer];
+    calculateTile(gameHandler,layer){
+        let layer_tiles = gameHandler.tileAmounts[layer];
         let offset = Math.PI/layer_tiles;
         let angleNorm = ( this.angle -offset )/(Math.PI*2);
         

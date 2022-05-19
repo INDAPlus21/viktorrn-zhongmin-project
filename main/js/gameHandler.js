@@ -13,9 +13,11 @@ class GameHandler{
         this.cycleSpeed = 1.5;  // round timer's max value before reset (a die is given when full)
         this.secondsPerCycle=4; // time for one cycle in the center ring aka time to pass 9 tiles
         
-        
+        this.lapsToWin = 2;
+
         this.timerValue=0,       // round timer (not displayed)
         this.timerReset=false,   // sets to true when round increments and timer resets
+        this.time = 0;
 
         this.layerAngleSpeeds=[];   // 
         this.radiuses=[90,240,400], // radius of each ring
@@ -105,7 +107,7 @@ class GameHandler{
             let tile = boardData['outerTiles'][i];
             if( (i - 1 - 2 )%(this.tileAmounts[2]/4) == 0 ){
                 tile.tileType = 'Passage';
-                tile.inCost = [2,4,6];
+                tile.inCost = [1,3,5];
                 j+=1;
             }
         }
@@ -115,10 +117,10 @@ class GameHandler{
         for(let i in boardData['middleTiles']){
             if(i == 0) continue; 
             let tile = boardData['middleTiles'][i];
-            if( ( i )%(this.tileAmounts[1]/3) == 0 ){
+            if( ( i-1 )%(this.tileAmounts[1]/3) == 0 ){
                 tile.tileType = 'Passage';
                 tile.inCost = [2,4];
-                tile.outCost = [1,3];
+                tile.outCost = [2,5];
                 j+=1;
             }
         }
@@ -128,7 +130,7 @@ class GameHandler{
         for(let i in boardData['innerTiles']){
             if(i == 0) continue; 
             let tile = boardData['innerTiles'][i];
-            if( ( i-1 )%(this.tileAmounts[0]/3) == 0 ){
+            if( ( i )%(this.tileAmounts[0]/3) == 0 ){
                 tile.tileType = 'Passage';
                
                 tile.outCost = [1,6];
@@ -153,11 +155,7 @@ class GameHandler{
                 j+=1;
             }
         }
-    
-    
-    
-    
-       
+     
         return boardData;
     }
 
@@ -165,7 +163,7 @@ class GameHandler{
     // sendTime = current unix timestamp
     // 
     updateGameHandler(sendTime,serverPlayerList){
-        this.delta = gameHandlerFromServer.delta;
+        this.delta = this.time - sendTime;
 
         for(let i in serverPlayerList.players){
             this.players[i] = serverPlayerList[i];

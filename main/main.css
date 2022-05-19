@@ -123,6 +123,13 @@ section{
     display: inline-block;
 }
 
+.takeOffIcon{
+    width:100px; 
+    height: 100px;
+    background-image:url('../../art/takeOff.svg');
+    display: inline-block;
+}
+
 .diceContainer{
     position: relative;
     display:inline-block; 

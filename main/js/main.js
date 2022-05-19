@@ -88,7 +88,7 @@ function update(renderWorker){
     
     currentTime = currentTime.getTime();
     gameHandler.delta = (currentTime - gameHandler.timeSinceLastUpdate)/1000;
-
+    gameHandler.time = currentTime;
      
 
     const now = performance.now();

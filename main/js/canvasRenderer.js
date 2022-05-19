@@ -128,9 +128,20 @@ function drawPlane(planeDataList,planeDimensions){
         
         ctx.fillStyle = planeData.color;
         ctx.fill(plane);
+        
+
+        if(planeData.completedMiddleRun){
+            ctx.lineWidth = 25;
+            ctx.strokeStyle = "#ff8b00cc";
+            ctx.stroke(plane);
+        }
+
         ctx.lineWidth = 5;
         ctx.strokeStyle = "#222";
         ctx.stroke(plane);
+
+      
+        
     
         
         resetTransform();
