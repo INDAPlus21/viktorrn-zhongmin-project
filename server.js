@@ -1,9 +1,12 @@
 // obligatory
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
 const express = require('express') // create module
 let app = express(); // create an express object
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
-const gameHandlerClass = require('./main/js/gameHandler.js');
+import { createGameHandler } from './main/js/gameHandler.js'
+const __dirname = "."
 
 app.use(express.static(__dirname + '/main')); // exposes the 'public' dir as the frontend's root dir - thanks stackoverflow
 

@@ -292,14 +292,24 @@ class Plane{
     
     calcC(gameHandler) {
         let cLayerAngle = this.angle
-        let pLayerAngle = this.shadow?.angle ?? cLayerAngle;
+        let pLayerAngle = cLayerAngle;
+        if( this.shadow != null ){
+            pLayerAngle = this.shadow.angle
+        }
        
         
         let currentLayerX = this.calcX(cLayerAngle, gameHandler.radiuses[this.layer]);
         let currentLayerY = this.calcY(cLayerAngle, gameHandler.radiuses[this.layer]);
     
-        let prevLayerX = this.calcX(pLayerAngle, gameHandler.radiuses[this.shadow?.layer ?? this.layer]);
-        let prevLayerY = this.calcY(pLayerAngle, gameHandler.radiuses[this.shadow?.layer ?? this.layer]);
+        let prevLayerX = this.calcX(pLayerAngle, gameHandler.radiuses[this.layer]);
+        let prevLayerY = this.calcY(pLayerAngle, gameHandler.radiuses[this.layer]);
+        
+        if(this.shadow != null)
+        {
+            prevLayerX = this.calcX(pLayerAngle, gameHandler.radiuses[this.shadow.layer]);
+            prevLayerY = this.calcY(pLayerAngle, gameHandler.radiuses[this.shadow.layer]);
+        }
+       
         
         let interp_curve = 0.5 + Math.atan(7 * (this.interp - 0.5) )/(2 * Math.atan(7 * 0.5))
 
