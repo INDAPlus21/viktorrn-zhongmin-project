@@ -56,8 +56,9 @@ class GameHandler{
     }
 
     testIfDone(timeLeft){
+        console.log("done")
         if(timeLeft <= 0){
-            this.pause;
+            this.pause = true;
         }
     }
 

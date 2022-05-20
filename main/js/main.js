@@ -91,9 +91,8 @@ function update(renderWorker){
     gameHandler.delta = (currentTime - gameHandler.timeSinceLastUpdate)/1000;
     gameHandler.time = currentTime;
 
-    let timeLeft = (gameHandler.maxTime + (gameHandler.startTime - gameHandler.time))
-    Util.$('timeLeft').innerHTML = "Time: " + timeLeft;
-    gameHandler.testIfDone(timeLeft);
+   
+   
 
     const now = performance.now();
     while (gameHandler.frameBuffer.length > 0 && gameHandler.frameBuffer[0] <= now - 1000) 
@@ -126,7 +125,9 @@ function update(renderWorker){
             if(player == undefined || player == null) continue
             gameHandler = player.update(gameHandler);
         }
-        
+        let timeLeft = (gameHandler.maxTime + (gameHandler.startTime - gameHandler.time))
+        Util.$('timeLeft').innerHTML = "Time: " + timeLeft;
+        gameHandler.testIfDone(timeLeft);
         
     }
     
@@ -136,7 +137,7 @@ function update(renderWorker){
     drawUI(
         {
             data:[
-                ['drawPlayer',gameHandler.players[gameHandler.clientPlayer]],
+                ['drawPlayer',gameHandler.players[gameHandler.clientPlayer],gameHandler.clientPlayer],
             ]
         }
         

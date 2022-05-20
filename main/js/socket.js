@@ -1,6 +1,6 @@
 //import { createRequire } from "../../module";
 //const require = createRequire(import.meta.url);
-
+import {getGameHandler} from './main.js';
 function $(e){return document.getElementById(e)} 
 
 let socket = io(); // event listener/emitter

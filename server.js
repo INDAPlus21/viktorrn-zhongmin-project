@@ -166,8 +166,10 @@ io.on('connection', (socket) => { // server is online
 
     else {                                      // game starting!!
       callback('success');
-      for (const clienter of rooms[roomId][0]) {  // broadcast to all players in room that game is starting
-        socket.to(clienter).emit("gameStarting");
+      for (const ind in rooms[roomId][0]) {  // broadcast to all players in room that game is starting
+        let clienter = rooms[roomId][0][ind];
+        socket.to(clienter).emit("gameStarting",ind );
+        console.log("starting")
         
         rooms[roomId][1].resetGame();
         setInterval(()=>{ update(rooms[roomId],roomId,socket) },1000/144)

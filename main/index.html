@@ -5,14 +5,18 @@
         <link rel="stylesheet" href="./main.css">
         <script src="/socket.io/socket.io.js"></script>
         <style>
+            *{
+                color:#000;
+            }
             li{
                 margin:10px;
                 font-size: 1.3em; font-weight: bold
+               
             }
         </style>
     </head>
     <body>
-        <section id="preGameScreen" class="displaying">
+        <section id="preGameScreen" >
             <ul id="playerList" style="margin: 100px 0; ">
                 <h1 style="font-size: 2em; font-weight: bolder;">Players:</h1>
                 <li>p1</li>
@@ -24,7 +28,7 @@
             <div id="errorText"></div>
             
         </section>
-        <section id="gameScreen">
+        <section id="gameScreen" class="displaying">
            
             <div class="opacityDiv" id="opacityDiv"></div>
             <div class="borderDiv"></div>
