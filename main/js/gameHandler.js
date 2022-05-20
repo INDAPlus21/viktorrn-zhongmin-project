@@ -1,11 +1,9 @@
-
-import { PlayerController } from './playerController.js';
+import { PlayerController } from "./playerController.js";
 
 export function createGameHandler(){
     let gameHandler = new GameHandler();
     return gameHandler;
 }
-
 class GameHandler{
     constructor(){
 
@@ -186,3 +184,8 @@ class GameHandler{
         }
     }
 }
+
+/**function createGameHandler(){
+    let gameHandler = new GameHandler();
+    return gameHandler;
+} */

@@ -3,10 +3,11 @@ const express = require('express') // create module
 let app = express(); // create an express object
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
+const gameHandlerClass = require('./main/js/gameHandler.js');
 
 app.use(express.static(__dirname + '/main')); // exposes the 'public' dir as the frontend's root dir - thanks stackoverflow
 
-import { createGameHandler } from '/main/js/gameHandler.js';
+//gameHandlerClass.info("sam")
 
 /*
   Basic logic:
@@ -15,7 +16,7 @@ import { createGameHandler } from '/main/js/gameHandler.js';
     continuously accept and calculate actions from clients which are sent to the server in real time
 */
 
-setInterval(()=>{ update() },1000/9) // do this every frame - but what :thinking:
+//setInterval(()=>{ update() },1000/144) // do this every frame - but what :thinking:
 
 function update() { // update all clientside gamehandlers with the new gamehandler
   var currentTime = new Date();
@@ -46,6 +47,7 @@ function update() { // update all clientside gamehandlers with the new gamehandl
 
   gameHandler.timeSinceLastUpdate = currentTime; // 
   progressbarDOM.value = gameHandler.timerValue; // 
+
 
 }
 
@@ -173,7 +175,7 @@ function updateEveryone (roomId) {
 
   // here im using [2], feel free to switch back to [1] if its working (otherwise just leave it alone)
   for (const player of rooms[roomId][2].players) {         // for each player:
-    player.update();                                       // update gamehandler(?)
+    //player.update();                                       // update gamehandler(?)
     // get clientId somewhere here
     socket.to(clientId).emit("gameUpdate", rooms[roomId][2]); // broadcast the whole gamehandler back to the player (TODO: don't?)
   }

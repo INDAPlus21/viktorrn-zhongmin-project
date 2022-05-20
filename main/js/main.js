@@ -165,7 +165,7 @@ window.onload = () =>{
     console.log(gameHandler)
     // for rendering
     var offscreen = canvas.transferControlToOffscreen();
-    let renderWorker = new Worker('js/canvasRenderer.js'); 
+    let renderWorker = new Worker('./js/canvasRenderer.js'); 
     
     renderWorker.postMessage( 
         {canvas: offscreen,

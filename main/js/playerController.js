@@ -1,9 +1,8 @@
-
 import * as Util from './utility.js';
 
-
-
 export class PlayerController{
+   
+
     constructor(id,startPos,rads,tiles,startTile)
     {
        
@@ -332,4 +331,3 @@ class Plane{
         this.die = null;
     }
 }
-
