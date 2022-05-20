@@ -185,7 +185,7 @@ window.onload = () =>{
        gameHandler.keyStates[e.key] = 1;
 
         switch(e.key){
-            case 's':
+           /* case 's':
                 for(let plane of  gameHandler.players[gameHandler.clientPlayer].planes){
                     plane.transition((plane.layer - 1) % 3);
                     
@@ -211,7 +211,7 @@ window.onload = () =>{
                 break;
             case 'f':
                 gameHandler.dispFPS = !gameHandler.dispFPS;
-                break;
+                break;*/
         }
         
     }
