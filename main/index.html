@@ -4,13 +4,13 @@
         <link rel="stylesheet" href="./main.css">
     </head>
     <body>
-        <section id="preGameScreen">
-            <input id="serverIP" value="" placeholder="4-letter join code" type="text"><br>
-            <input id="loginPlayerName" value="" placeholder="Username" type="text" maxlength="40"><br>
+        <section id="preGameScreen" class="displaying">
+            <input id="serverIP" value="" placeholder="room code" type="text" maxlength="8"><br>
+            <input id="loginPlayerName" value="" placeholder="display name" type="text" maxlength="40"><br>
             <button id="joinServerBtn">Join Server</button><br>
             <div id="loginErrorText"></div>
         </section>
-        <section id="gameScreen" class="displaying">
+        <section id="gameScreen">
            
             <div class="opacityDiv" id="opacityDiv"></div>
             <div class="borderDiv"></div>
@@ -76,6 +76,17 @@
             </div>
            
             
+        </section>
+        <section id="endingScreen">
+            <h1>Time's Up!</h1>
+            <h2>Here's how everyone did...</h2>
+            <div id="endLeaderboard">
+                <div class="lbItem"></div>
+                <div class="lbItem"></div>
+                <div class="lbItem"></div>
+                <div class="lbItem"></div>
+            </div>
+            <p>Thanks for playing!</p>
         </section>
 
         <script src="./js/main.js" type="module"></script>
