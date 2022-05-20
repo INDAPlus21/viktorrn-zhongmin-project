@@ -1,11 +1,9 @@
-
-import { PlayerController } from './playerController.js';
+import { PlayerController } from "./playerController.js";
 
 export function createGameHandler(){
     let gameHandler = new GameHandler();
     return gameHandler;
 }
-
 class GameHandler{
     constructor(){
 
@@ -18,6 +16,8 @@ class GameHandler{
         this.timerValue=0,       // round timer (not displayed)
         this.timerReset=false,   // sets to true when round increments and timer resets
         this.time = 0;
+        this.maxTime = 1000*60*3; // 3 min
+        this.startTime = 0;
 
         this.layerAngleSpeeds=[];   // 
         this.radiuses=[90,240,400], // radius of each ring
@@ -53,6 +53,20 @@ class GameHandler{
             outerTiles: []
         };
 
+    }
+
+    testIfDone(timeLeft){
+        if(timeLeft <= 0){
+            this.pause;
+        }
+    }
+
+    resetGame(){
+        this.startTime = 0;
+        var currentTime = new Date();
+    
+        this.startTime = currentTime.getTime();
+        this.pause = false;
     }
 
     calcLayerAngleSpeeds(tileAmounts){
@@ -170,3 +184,8 @@ class GameHandler{
         }
     }
 }
+
+/**function createGameHandler(){
+    let gameHandler = new GameHandler();
+    return gameHandler;
+} */
