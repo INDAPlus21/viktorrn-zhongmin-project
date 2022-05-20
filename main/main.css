@@ -19,12 +19,12 @@ section{
 .displaying{
     display: block;
 }
-#preGameScreen.displaying, #EndScreen.displaying {
+#preGameScreen.displaying, #endScreen.displaying {
     display: flex;
 }
 
 /* pre- and post-game */
-#preGameScreen, #EndScreen {
+#preGameScreen, #endScreen {
     text-align: center;
     flex-direction: column;
     align-items: center;
@@ -51,15 +51,16 @@ section{
     font-size: .8em;
     font-family: monospace;
 }
-#endingScreen h1 {
+#endScreen h1 {
     margin: 0 0 1em 0;
+    font-size: 2.5em;
+    font-weight: bold;
 }
-#endingScreen h2 {
+#endScreen h2 {
     margin: 0 0 2em 0;
+    font-size: 1.8em;
 }
 #endLeaderboard {
-    margin: 0;
-    padding: 0;
     max-width: 500px;
 }
 .lbItem {
@@ -68,6 +69,7 @@ section{
     display: flex;
     justify-content: center;
     align-items: center;
+    font-size: 1.3em;
 }
 
 /* gameScreen basic */
