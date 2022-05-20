@@ -6,6 +6,8 @@ const io = require('socket.io')(http);
 
 app.use(express.static(__dirname + '/main')); // exposes the 'public' dir as the frontend's root dir - thanks stackoverflow
 
+import { createGameHandler } from '/main/js/gameHandler.js';
+
 /*
   Basic logic:
   - The basic time unit is rounds, initially set to 2 seconds but configurable and will be changed as game drags on
@@ -13,54 +15,46 @@ app.use(express.static(__dirname + '/main')); // exposes the 'public' dir as the
     continuously accept and calculate actions from clients which are sent to the server in real time
 */
 
-setInterval(()=>{ },1000/144)
-function update(renderWorker){
+setInterval(()=>{ update() },1000/9) // do this every frame - but what :thinking:
+
+function update() { // update all clientside gamehandlers with the new gamehandler
   var currentTime = new Date();
   
-  currentTime = currentTime.getTime();
-  gameHandler.delta = (currentTime - gameHandler.timeSinceLastUpdate)/1000;
+  currentTime = currentTime.getTime();                                      // current unix timestamp
+  gameHandler.delta = (currentTime - gameHandler.timeSinceLastUpdate)/1000; //
   gameHandler.time += gameHandler.delta;
 
 
   gameHandler.planes = [];
 
   gameHandler.tilesOccupied = {
-      'innerTiles':[],
-      'middleTiles':[],
-      'outerTiles':[],  
+    'innerTiles':[],
+    'middleTiles':[],
+    'outerTiles':[],  
   };
 
   gameHandler.timerReset = false;
 
   if(!gameHandler.pause)
   {
-      gameHandler.timerValue += gameHandler.delta/gameHandler.secondsPerCycle;
-      if(gameHandler.timerValue >= 1){
-          gameHandler.timerValue = 0;
-          gameHandler.timerReset = true;
-      }
-
-      for(let player of gameHandler.players){
-          if(player == undefined || player == null) continue
-          gameHandler = player.update(gameHandler);
-      }  
-
-
+    gameHandler.timerValue += gameHandler.delta/gameHandler.secondsPerCycle;
+    if(gameHandler.timerValue >= 1){
+      gameHandler.timerValue = 0;
+      gameHandler.timerReset = true;
+    }
   }
 
-  gameHandler.timeSinceLastUpdate = currentTime;
-  progressbarDOM.value = gameHandler.timerValue;
-
-  
-  // 
+  gameHandler.timeSinceLastUpdate = currentTime; // 
+  progressbarDOM.value = gameHandler.timerValue; // 
 
 }
 
 let rooms = {};
 /*an object with room IDs as key, and an array of objects as value.
   example: let id = 'SGLV';
-  rooms[id][0]; // an array of all players' gameHandler objects
-  rooms[id][1]; // current board/game state
+  rooms[id][0]; // an array of all players' socket ids
+  rooms[id][1]; // an array of all players' game objects
+  rooms[id][2]; // current board/game state
   state object structure:
   {
     "round": 0,

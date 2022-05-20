@@ -115,6 +115,7 @@ function update(renderWorker){
         if(gameHandler.timerValue >= 1){
             gameHandler.timerValue = 0;
             gameHandler.timerReset = true;
+            // TODO: is round time up?
         }
 
         for(let player of gameHandler.players){
