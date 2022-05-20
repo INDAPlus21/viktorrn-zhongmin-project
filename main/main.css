@@ -41,15 +41,17 @@ section{
     width: 100px; 
     transform: scale(2);
 }
-#joinServerBtn {
-    height:30px; 
+#joinServerBtn, #startGameBtn {
+    margin: 20px;
+    height:30px;
     width: 100px; 
     transform: scale(2);
 }
-#loginErrorText {
+#errorText {
     margin-top:2em;
     font-size: .8em;
     font-family: monospace;
+    transform: scale(2);
 }
 #endingScreen h1 {
     margin: 0 0 1em 0;

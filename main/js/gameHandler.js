@@ -24,7 +24,7 @@ class GameHandler{
         this.tileAmounts=[9,18,36], // how many tiles in each ring
         this.playerAmount=4,        // how many players in the game
     
-        this.pause=false,
+        this.pause=true,
         this.dispFPS=true,
         
     
@@ -78,8 +78,8 @@ class GameHandler{
         return list;
     }
 
-    createPlayer(playerIndex,gameHandler){
-        return new PlayerController(playerIndex,{angle:gameHandler.playerStartAngles[playerIndex]},gameHandler.radiuses,gameHandler.tileAmounts,gameHandler.playerStartTiles[playerIndex]);
+    createPlayer(playerIndex,gameHandler,playerName){
+        return new PlayerController(playerIndex,{angle:gameHandler.playerStartAngles[playerIndex]},gameHandler.radiuses,gameHandler.tileAmounts,gameHandler.playerStartTiles[playerIndex],playerName);
     }
 
     createBoard(layers,boardData){ 

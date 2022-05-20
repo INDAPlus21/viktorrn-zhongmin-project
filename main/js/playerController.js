@@ -3,7 +3,7 @@ import * as Util from './utility.js';
 export class PlayerController{
    
 
-    constructor(id,startPos,rads,tiles,startTile)
+    constructor(id,startPos,rads,tiles,startTile,playerName)
     {
        
         this.id = id;
@@ -28,7 +28,7 @@ export class PlayerController{
         this.dieSelected = null; 
         this.overPlane = null;
 
-        this.name = "";   
+        this.name = playerName;   
         
     }
 
@@ -37,7 +37,7 @@ export class PlayerController{
     }
 
     update(gameHandler){
-
+        
         this.needsToBeReDrawn = true;
 
         if(gameHandler.timerReset)

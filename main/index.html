@@ -3,13 +3,26 @@
     <head>
         <link rel="stylesheet" href="./reset.css">
         <link rel="stylesheet" href="./main.css">
+        <script src="/socket.io/socket.io.js"></script>
+        <style>
+            li{
+                margin:10px;
+                font-size: 1.3em; font-weight: bold
+            }
+        </style>
     </head>
     <body>
         <section id="preGameScreen" class="displaying">
+            <ul id="playerList" style="margin: 100px 0; ">
+                <h1 style="font-size: 2em; font-weight: bolder;">Players:</h1>
+                <li>p1</li>
+            </ul>
             <input id="serverIP" value="" placeholder="room code" type="text" maxlength="8"><br>
             <input id="loginPlayerName" value="" placeholder="display name" type="text" maxlength="40"><br>
             <button id="joinServerBtn">Join Server</button><br>
-            <div id="loginErrorText"></div>
+            <button id="startGameBtn" style="display: none;">Start Game</button><br>
+            <div id="errorText"></div>
+            
         </section>
         <section id="gameScreen">
            
@@ -91,6 +104,7 @@
         </section>
 
         <script src="./js/main.js" type="module"></script>
+        <script src="./js/socket.js" type="module"></script>
        
         
         

@@ -9,15 +9,16 @@ export async function drawUI(inData){
         switch(data[0])
         {
             case 'drawPlayer':
-                drawPlayer(data[1])
+                drawPlayer(data[1],data[2])
                 break;
         }
     }
     return;
 }
 
-function drawPlayer(playerData)
-{
+function drawPlayer(playerData,playerIndex)
+{   
+    if(playerIndex != playerData.id ) return
     //if(!playerData.needsToBeReDrawn) return;
     drawPlayerDice(playerData);
     drawPlayerPlaneCards(playerData);
@@ -46,7 +47,8 @@ function drawPlayer(playerData)
       
 }
 
-function drawPlayerDice(playerData){
+function drawPlayerDice(playerData,playerIndex){
+    
     Util.clearDOMElement(diceKey);
     for(let ind in playerData.dice){
         
@@ -54,10 +56,13 @@ function drawPlayerDice(playerData){
         let dieDiv = generateDieDiv(die);
         dieDiv.setAttribute('index',ind);
 
-        dieDiv.onpointerdown = (e) =>{
-            playerData.klickedDie(dieDiv)
-
-        }
+      
+            dieDiv.onpointerdown = (e) =>{
+                playerData.klickedDie(dieDiv)
+    
+            }
+        
+        
         if(playerData.dieSelected != null && ind == playerData.dieSelected.index) dieDiv.classList.add('selected')
         diceKey.appendChild(dieDiv);
     }
@@ -87,25 +92,28 @@ function drawPlayerPlaneCards(playerData){
         card.appendChild(diceContainer);
         planeCardKey.appendChild(card);
 
-        if(playerData.dieSelected != null)
-        {
-            addDie.style.display = "block";
-            diceContainer.onpointerdown = (e) =>
+       
+            if(playerData.dieSelected != null)
             {
-                playerData.klickedAddDieToPlane(ind);
-            } 
-        };
-
-        if(plane.die != null) 
-        {
-            let dieDiv = generateDieDiv(plane.die);
-            
-            diceContainer.onpointerdown = (e) =>
+                addDie.style.display = "block";
+                diceContainer.onpointerdown = (e) =>
+                {
+                    playerData.klickedAddDieToPlane(ind);
+                } 
+            };
+    
+            if(plane.die != null) 
             {
-                plane.klickedOnPlaneDie();
+                let dieDiv = generateDieDiv(plane.die);
+                
+                diceContainer.onpointerdown = (e) =>
+                {
+                    plane.klickedOnPlaneDie();
+                }
+                diceContainer.appendChild(dieDiv);
             }
-            diceContainer.appendChild(dieDiv);
-        }
+      
+        
     }
 }
 

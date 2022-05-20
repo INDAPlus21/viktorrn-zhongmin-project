@@ -1,6 +1,5 @@
 
 import { createGameHandler } from './gameHandler.js';
-import { PlayerController } from './playerController.js';
 import { drawUI } from './uiRenderer.js';
 import * as Util from './utility.js';
 const canvas = Util.$('boardScreen');
@@ -35,6 +34,8 @@ const updateRateDOM = Util.$('updatesPerSecond');
 
 
 // gamedata that will end up in json
+
+
 
 
 
@@ -224,6 +225,10 @@ window.onload = () =>{
     Util.$('gameScreen').onclick = (e)=>{
         gameHandler.players[gameHandler.clientPlayer].dieSelected = null;
     }
+}
+
+export function getGameHandler(){
+    return gameHandler;
 }
 
 
